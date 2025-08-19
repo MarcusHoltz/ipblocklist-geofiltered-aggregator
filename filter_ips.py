@@ -10,7 +10,7 @@ NEW MULTI-COUNTRY FEATURES:
     - Supports multiple COUNTRY_ISO_CODE_N and COUNTRY_NAME_N variables
     - Generates separate output files for each country
     - Creates combined multi-country output file
-    - Enhanced statistics reporting
+    - Enhanced statistics reporting with Mermaid pie charts
 
 REQUIREMENTS:
     pip install pysubnettree pandas python-dotenv requests
@@ -22,7 +22,7 @@ MAIN WORKFLOW:
     4. Filter GeoIP networks by all target countries
     5. Process each country separately with optimized networks
     6. Generate individual country files and combined file
-    7. Create comprehensive statistics report
+    7. Create comprehensive statistics report with Mermaid pie chart
 """
 
 # =============================================================================
@@ -94,9 +94,8 @@ def detect_country_configs():
     """
     Dynamically detect all COUNTRY_ISO_CODE_* and COUNTRY_NAME_* variables from environment.
     
-    This function scans environment variables to find all country configurations,
-    similar to how LIST_* variables are detected. It supports both numbered
-    (COUNTRY_ISO_CODE_1) and legacy single (COUNTRY_ISO_CODE) formats.
+    ENHANCED VERSION: Now properly detects all numbered country configurations
+    and handles edge cases that were causing countries to be missed.
     
     RETURNS:
         list: List of tuples (iso_code, country_name, suffix)
@@ -107,41 +106,93 @@ def detect_country_configs():
             COUNTRY_NAME_1=United States
             COUNTRY_ISO_CODE_2=CA
             COUNTRY_NAME_2=Canada
+            COUNTRY_ISO_CODE_15=DE
+            COUNTRY_NAME_15=Germany
             
-        Returns: [('US', 'United States', '1'), ('CA', 'Canada', '2')]
+        Returns: [('US', 'United States', '1'), ('CA', 'Canada', '2'), ('DE', 'Germany', '15')]
     """
     countries = []
     
     # Get all environment variables
     env_vars = dict(os.environ)
     
-    # Find all COUNTRY_ISO_CODE variables (both numbered and legacy)
-    iso_code_pattern = re.compile(r'^COUNTRY_ISO_CODE(_(\d+))?$')
+    # Debug: Log all COUNTRY_ variables found
+    country_vars = {k: v for k, v in env_vars.items() if k.startswith('COUNTRY_')}
+    logging.info(f"Found {len(country_vars)} COUNTRY_ variables in environment")
     
+    # More flexible regex pattern that catches all numbered variations
+    # This will match: COUNTRY_ISO_CODE_1, COUNTRY_ISO_CODE_10, COUNTRY_ISO_CODE_999, etc.
+    iso_code_pattern = re.compile(r'^COUNTRY_ISO_CODE(_)?(\d*)$')
+    
+    # Find all COUNTRY_ISO_CODE variables (including legacy COUNTRY_ISO_CODE without number)
     for var_name, var_value in env_vars.items():
         match = iso_code_pattern.match(var_name)
         if match:
-            # Extract suffix (number or empty for legacy)
-            suffix = match.group(2) if match.group(2) else ""
-            suffix_with_underscore = f"_{suffix}" if suffix else ""
+            # Handle both legacy (no number) and numbered formats
+            has_underscore = match.group(1) is not None
+            number_part = match.group(2)
             
-            iso_code = var_value.strip()
+            if has_underscore and number_part:
+                # Format: COUNTRY_ISO_CODE_123
+                suffix = number_part
+                suffix_with_underscore = f"_{suffix}"
+            elif not has_underscore and not number_part:
+                # Format: COUNTRY_ISO_CODE (legacy)
+                suffix = ""
+                suffix_with_underscore = ""
+            else:
+                # Skip malformed patterns like COUNTRY_ISO_CODE_ (underscore but no number)
+                logging.debug(f"Skipping malformed country variable: {var_name}")
+                continue
+            
+            iso_code = var_value.strip().upper()  # Normalize to uppercase
             
             # Find corresponding COUNTRY_NAME variable
             name_var = f"COUNTRY_NAME{suffix_with_underscore}"
-            country_name = env_vars.get(name_var, "Unknown").strip()
+            country_name = env_vars.get(name_var, f"Unknown-{iso_code}").strip()
             
             if iso_code:  # Only add if ISO code is not empty
                 countries.append((iso_code, country_name, suffix))
-                logging.info(f"Detected country config: {iso_code} ({country_name}) [suffix: {suffix or 'legacy'}]")
+                logging.info(f"Detected country config: {iso_code} ({country_name}) [suffix: '{suffix or 'legacy'}']")
+            else:
+                logging.warning(f"Empty ISO code found in {var_name}")
     
     # Sort by suffix for consistent ordering (legacy first, then by number)
-    countries.sort(key=lambda x: (x[2] == "", int(x[2]) if x[2] else 0))
+    def sort_key(country_tuple):
+        _, _, suffix = country_tuple
+        if suffix == "":
+            return (0, 0)  # Legacy comes first
+        else:
+            try:
+                return (1, int(suffix))  # Then by number
+            except ValueError:
+                return (2, suffix)  # Non-numeric suffixes last, sorted alphabetically
+    
+    countries.sort(key=sort_key)
     
     if not countries:
-        logging.warning("No COUNTRY_ISO_CODE variables found in environment")
+        logging.error("No COUNTRY_ISO_CODE variables found in environment!")
+        logging.error("Expected format: COUNTRY_ISO_CODE_1=US, COUNTRY_NAME_1=United States")
+        
+        # Show what COUNTRY_ variables were found for debugging
+        if country_vars:
+            logging.error("Found these COUNTRY_ variables:")
+            for var_name, var_value in sorted(country_vars.items()):
+                logging.error(f"  {var_name}={var_value}")
+        else:
+            logging.error("No COUNTRY_ variables found at all!")
+            
     else:
         logging.info(f"Total countries detected: {len(countries)}")
+        
+        # Validate that we have both ISO codes and names for each
+        missing_names = []
+        for iso_code, country_name, suffix in countries:
+            if country_name.startswith("Unknown-"):
+                missing_names.append(f"COUNTRY_NAME_{suffix}" if suffix else "COUNTRY_NAME")
+        
+        if missing_names:
+            logging.warning(f"Missing country name variables: {', '.join(missing_names)}")
     
     return countries
 
@@ -436,6 +487,84 @@ def _process_ip_batch(ip_batch):
 
 
 # =============================================================================
+# MERMAID PIE CHART GENERATION
+# =============================================================================
+def generate_mermaid_pie_chart(country_statistics, total_input_ips, top_n=19):
+    """
+    Generate a Mermaid pie chart to visualize the distribution of IPs 
+    based on the top countries with the highest filter rates.
+    The rest of the countries will be grouped under "Other/Unfiltered".
+    
+    Parameters:
+        country_statistics (list of dict): List of dictionaries containing country stats.
+            Each dictionary should include 'country_name', 'iso_code', and 'ips_matched'.
+        total_input_ips (int): The total number of input IPs.
+        top_n (int): The number of top countries to include in the chart. Defaults to 19.
+
+    Returns:
+        str: Mermaid formatted pie chart or an empty chart if no significant data exists.
+    """
+    # If no IPs were processed, return an empty pie chart with a message
+    if total_input_ips == 0:
+        return "```mermaid\npie title No IPs processed\n\"No Data\" : 100\n```"
+
+    # Create a list of countries with their corresponding filter rate (percentage of matched IPs)
+    country_stats_with_rate = []
+    for stats in country_statistics:
+        rate = (stats['ips_matched'] / total_input_ips * 100) if total_input_ips > 0 else 0
+        country_stats_with_rate.append({**stats, 'filter_rate': rate})
+
+    # Sort countries by filter rate in descending order
+    sorted_stats = sorted(country_stats_with_rate, key=lambda x: x['filter_rate'], reverse=True)
+
+    # Get the top N countries and the rest (other countries)
+    top_countries = sorted_stats[:top_n]
+    other_countries = sorted_stats[top_n:]
+
+    # Initialize a list to hold pie chart entries and a variable to track total top IPs
+    pie_entries = []
+    total_top_ips = 0
+    total_top_filter_rate = 0  # To calculate the sum of filter rates for the top countries
+
+    # Process the top N countries and add them to the pie chart
+    for stats in top_countries:
+        if stats['ips_matched'] > 0:
+            percentage = stats['filter_rate']
+            if percentage >= 0.1:  # Only include countries with a filter rate above 0.1%
+                country_label = f"{stats['country_name']}"
+                pie_entries.append(f'"{country_label}" : {percentage:.1f}')
+                total_top_ips += stats['ips_matched']
+                total_top_filter_rate += percentage  # Sum of the filter rates for top countries
+
+    # Calculate the "Other/Unfiltered" category
+    other_percentage = 100 - total_top_filter_rate  # The remainder goes to "Other/Unfiltered"
+
+    # Always include "Other/Unfiltered" as the last entry if it's >= 0.1%
+    if other_percentage >= 0.1:
+        pie_entries.append(f'"Other/Unfiltered" : {other_percentage:.1f}')
+
+    # If no pie entries, return an empty pie chart
+    if not pie_entries:
+        return (
+            "```mermaid\n"
+            "pie showData title IP Blocklist Distribution by Country\n"
+            "\"No significant data\" : 100\n"
+            "```"
+        )
+
+    # Generate the final Mermaid pie chart content
+    chart_content = (
+        "```mermaid\n"
+        "pie showData title IP Blocklist Distribution by Country\n"
+        + "\n".join(pie_entries) +
+        "\n```"
+    )
+    
+    # Return the generated chart content
+    return chart_content
+
+
+# =============================================================================
 # MULTI-COUNTRY FILTERING FUNCTIONS
 # =============================================================================
 
@@ -596,7 +725,8 @@ def filter_multi_country_ips():
     
     This enhanced version processes multiple countries in sequence,
     generates individual output files for each country, creates a
-    combined multi-country file, and produces comprehensive statistics.
+    combined multi-country file, and produces comprehensive statistics
+    with Mermaid pie chart visualization.
     """
     
     logging.info("=== MULTI-COUNTRY IP FILTERING PROCESS STARTED ===")
@@ -729,10 +859,13 @@ def filter_multi_country_ips():
         combined_filename = None
     
     # =========================================================================
-    # STAGE 8: GENERATE COMPREHENSIVE STATISTICS
+    # STAGE 8: GENERATE COMPREHENSIVE STATISTICS WITH MERMAID PIE CHART
     # =========================================================================
     
-    logging.info("Stage 7: Generating statistics...")
+    logging.info("Stage 7: Generating statistics with Mermaid pie chart...")
+    
+    # Generate Mermaid pie chart
+    pie_chart = generate_mermaid_pie_chart(country_statistics, total_input_ips)
     
     # Create detailed statistics file
     stats_path = "/data/output/stats.md"
@@ -741,6 +874,11 @@ def filter_multi_country_ips():
         with open(stats_path, 'w') as stats_file:
             stats_file.write("# Multi-Country IP Aggregation Statistics\n\n")
             stats_file.write(f"**Last Updated:** {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S UTC')}\n\n")
+            
+            # Add Mermaid pie chart
+            stats_file.write("## 📈 Country Distribution\n\n")
+            stats_file.write(pie_chart)
+            stats_file.write("\n\n")
             
             # Overall summary
             stats_file.write("## Overall Summary\n\n")
@@ -781,20 +919,8 @@ def filter_multi_country_ips():
             
             # Configuration details
             stats_file.write("## Configuration Details\n\n")
-            stats_file.write("### Countries Configured\n\n")
-            for iso_code, country_name, suffix in country_configs:
-                suffix_display = f" (#{suffix})" if suffix else " (legacy)"
-                stats_file.write(f"- **{country_name}** ({iso_code}){suffix_display}\n")
-                       
-            # File sizes and technical info
-            stats_file.write("\n### Output Files Generated\n\n")
-            for stats in country_statistics:
-                if stats['output_file']:
-                    stats_file.write(f"- `{stats['output_file']}` - {stats['ips_matched']:,} IPs for {stats['country_name']}\n")
-            if combined_filename:
-                stats_file.write(f"- `{combined_filename}` - {len(all_filtered_ips):,} unique IPs (combined)\n")
-        
-        logging.info(f"Statistics written to {stats_path}")
+
+        logging.info(f"Statistics with Mermaid pie chart written to {stats_path}")
         
     except IOError as stats_error:
         logging.error(f"Failed to write statistics file: {stats_error}")
