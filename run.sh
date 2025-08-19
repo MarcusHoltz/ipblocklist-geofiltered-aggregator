@@ -79,12 +79,31 @@ fi
 
 echo "[INFO] Aggregation complete: $(wc -l < "$OUTPUT_DIR/aggregated.txt") unique networks/IPs"
 
-# Filter to country-specific IPs if COUNTRY_ISO_CODE is set
-if [ -n "$COUNTRY_ISO_CODE" ]; then
-  echo "[INFO] Filtering ${COUNTRY_ISO_CODE}-only IPs..."
+# Check for multi-country configuration (NEW FORMAT) or legacy single country
+COUNTRY_VARS_FOUND=false
+
+# Check for numbered country variables (COUNTRY_ISO_CODE_1, COUNTRY_ISO_CODE_2, etc.)
+for var in $(env | grep '^COUNTRY_ISO_CODE_[0-9]' | cut -d= -f1); do
+  if [ -n "${!var}" ]; then
+    COUNTRY_VARS_FOUND=true
+    break
+  fi
+done
+
+# Check for legacy single country variable if no numbered ones found
+if [ "$COUNTRY_VARS_FOUND" = false ] && [ -n "$COUNTRY_ISO_CODE" ]; then
+  COUNTRY_VARS_FOUND=true
+fi
+
+# Run country filtering if any country configuration is found
+if [ "$COUNTRY_VARS_FOUND" = true ]; then
+  echo "[INFO] Country configuration detected, running multi-country filtering..."
   if ! python /app/filter_ips.py; then
     echo "[WARNING] Country filtering failed, but continuing..."
   fi
+else
+  echo "[INFO] No country filtering configuration found - skipping geographic filtering"
+  echo "[INFO] To enable country filtering, set COUNTRY_ISO_CODE_1, COUNTRY_NAME_1, etc. in .env"
 fi
 
 # Clean up downloaded input files and temporary files
@@ -101,7 +120,20 @@ if [ -f "$OUTPUT_DIR/aggregated.txt" ]; then
 fi
 
 # Show country-specific results if they exist
-COUNTRY_FILE="$OUTPUT_DIR/aggregated-$(echo ${COUNTRY_ISO_CODE:-xx} | tr '[:upper:]' '[:lower:]')-only.txt"
-if [ -f "$COUNTRY_FILE" ]; then
-  echo "[INFO] Country-filtered IPs: $(wc -l < "$COUNTRY_FILE")"
-fi
+echo "[INFO] Checking for country-specific output files..."
+for country_file in "$OUTPUT_DIR"/aggregated-*-only.txt; do
+  if [ -f "$country_file" ]; then
+    filename=$(basename "$country_file")
+    count=$(wc -l < "$country_file")
+    echo "[INFO] $filename: $count IPs"
+  fi
+done
+
+# Show combined multi-country files if they exist
+for combined_file in "$OUTPUT_DIR"/aggregated-*-combined.txt; do
+  if [ -f "$combined_file" ]; then
+    filename=$(basename "$combined_file")
+    count=$(wc -l < "$combined_file")
+    echo "[INFO] Combined file $filename: $count IPs"
+  fi
+done

@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
 """
-filter_ips.py — Optimized GeoIP-based IP Address Filtering Tool
+filter_ips.py — Enhanced Multi-Country GeoIP-based IP Address Filtering Tool
 
-This script filters IP addresses by country using GeoIP data and Zeek's SubnetTree
+This script filters IP addresses by multiple countries using GeoIP data and Zeek's SubnetTree
 for efficient network lookups. It processes large IP lists in parallel batches
 while preserving original formatting (including CIDR notation).
+
+NEW MULTI-COUNTRY FEATURES:
+    - Supports multiple COUNTRY_ISO_CODE_N and COUNTRY_NAME_N variables
+    - Generates separate output files for each country
+    - Creates combined multi-country output file
+    - Enhanced statistics reporting
 
 REQUIREMENTS:
     pip install pysubnettree pandas python-dotenv requests
@@ -12,15 +18,11 @@ REQUIREMENTS:
 MAIN WORKFLOW:
     1. Load configuration from environment variables (.env file)
     2. Download GeoIP CSV data if not present locally
-    3. Filter GeoIP networks by target country (ISO code or name)
-    4. Collapse overlapping networks for optimization
-    5. Build SubnetTree data structure in each worker process
-    6. Process input IPs in parallel batches
-    7. Write filtered results to output file
-    8. Clean up temporary GeoIP data
-
-DATA FLOW:
-    Input IPs → Country Network Filter → SubnetTree Lookup → Filtered Output
+    3. Dynamically detect all COUNTRY_* variables
+    4. Filter GeoIP networks by all target countries
+    5. Process each country separately with optimized networks
+    6. Generate individual country files and combined file
+    7. Create comprehensive statistics report
 """
 
 # =============================================================================
@@ -37,6 +39,7 @@ from dotenv import load_dotenv          # Environment variable loading
 import shutil                           # High-level file operations
 import pandas as pd                     # Data manipulation and analysis
 import requests                         # HTTP requests for downloading data
+import re                              # Regular expressions for pattern matching
 
 # =============================================================================
 # CRITICAL DEPENDENCY CHECK
@@ -64,19 +67,10 @@ except Exception as exc:
 # This allows users to configure the script without modifying code
 load_dotenv()
 
-# COUNTRY CONFIGURATION
-# These settings determine which country's IPs will be filtered
-country_iso_code = os.getenv('COUNTRY_ISO_CODE', 'US')
-country_name = os.getenv('COUNTRY_NAME', 'United States')
-
 # FILE PATH CONFIGURATION
 # Define where input and output files are located
 GEOIP_CSV_PATH = os.getenv('GEOIP_CSV_PATH', '/data/geoip/geoip2-ipv4.csv')
 ALL_IPS_FROM_LISTS = os.getenv('ALL_IPS_FROM_LISTS', '/data/output/aggregated.txt')
-
-# DYNAMIC OUTPUT PATH
-# Generate output filename based on country code (e.g., US -> aggregated-us-only.txt)
-COUNTRY_ONLY_IPS = f'/data/output/aggregated-{country_iso_code.lower()}-only.txt'
 
 # PERFORMANCE TUNING
 # Allow override of worker process count via environment variable
@@ -91,6 +85,65 @@ NUM_WORKERS_OVERRIDE = max(1, int(NUM_WORKERS_ENV)) if NUM_WORKERS_ENV else None
 # This global variable holds the SubnetTree instance in each worker process
 # It's initialized once per worker and then used for all IP lookups in that worker
 WORKER_TREE = None
+
+# =============================================================================
+# COUNTRY CONFIGURATION DETECTION
+# =============================================================================
+
+def detect_country_configs():
+    """
+    Dynamically detect all COUNTRY_ISO_CODE_* and COUNTRY_NAME_* variables from environment.
+    
+    This function scans environment variables to find all country configurations,
+    similar to how LIST_* variables are detected. It supports both numbered
+    (COUNTRY_ISO_CODE_1) and legacy single (COUNTRY_ISO_CODE) formats.
+    
+    RETURNS:
+        list: List of tuples (iso_code, country_name, suffix)
+        
+    EXAMPLE:
+        Environment:
+            COUNTRY_ISO_CODE_1=US
+            COUNTRY_NAME_1=United States
+            COUNTRY_ISO_CODE_2=CA
+            COUNTRY_NAME_2=Canada
+            
+        Returns: [('US', 'United States', '1'), ('CA', 'Canada', '2')]
+    """
+    countries = []
+    
+    # Get all environment variables
+    env_vars = dict(os.environ)
+    
+    # Find all COUNTRY_ISO_CODE variables (both numbered and legacy)
+    iso_code_pattern = re.compile(r'^COUNTRY_ISO_CODE(_(\d+))?$')
+    
+    for var_name, var_value in env_vars.items():
+        match = iso_code_pattern.match(var_name)
+        if match:
+            # Extract suffix (number or empty for legacy)
+            suffix = match.group(2) if match.group(2) else ""
+            suffix_with_underscore = f"_{suffix}" if suffix else ""
+            
+            iso_code = var_value.strip()
+            
+            # Find corresponding COUNTRY_NAME variable
+            name_var = f"COUNTRY_NAME{suffix_with_underscore}"
+            country_name = env_vars.get(name_var, "Unknown").strip()
+            
+            if iso_code:  # Only add if ISO code is not empty
+                countries.append((iso_code, country_name, suffix))
+                logging.info(f"Detected country config: {iso_code} ({country_name}) [suffix: {suffix or 'legacy'}]")
+    
+    # Sort by suffix for consistent ordering (legacy first, then by number)
+    countries.sort(key=lambda x: (x[2] == "", int(x[2]) if x[2] else 0))
+    
+    if not countries:
+        logging.warning("No COUNTRY_ISO_CODE variables found in environment")
+    else:
+        logging.info(f"Total countries detected: {len(countries)}")
+    
+    return countries
 
 # =============================================================================
 # GEOIP DATA MANAGEMENT FUNCTIONS
@@ -277,8 +330,8 @@ def _init_worker(cidr_list):
     WORKER_TREE = subnet_tree
     
     # Log initialization results
-    logging.info(f"Worker initialized: {added_count} networks in SubnetTree "
-                f"({error_count} errors)")
+    logging.debug(f"Worker initialized: {added_count} networks in SubnetTree "
+                 f"({error_count} errors)")
 
 
 def _process_ip_batch(ip_batch):
@@ -383,57 +436,190 @@ def _process_ip_batch(ip_batch):
 
 
 # =============================================================================
+# MULTI-COUNTRY FILTERING FUNCTIONS
+# =============================================================================
+
+def process_single_country(iso_code, country_name, suffix, geoip_dataframe, input_ip_list, optimal_workers):
+    """
+    Process IPs for a single country and return filtered results.
+    
+    ARGS:
+        iso_code (str): Country ISO code (e.g., 'US')
+        country_name (str): Full country name (e.g., 'United States')
+        suffix (str): Variable suffix (e.g., '1', '2', or '' for legacy)
+        geoip_dataframe (pd.DataFrame): GeoIP data
+        input_ip_list (list): List of IPs to filter
+        optimal_workers (int): Number of worker processes to use
+        
+    RETURNS:
+        tuple: (filtered_ips_list, stats_dict)
+    """
+    logging.info(f"=== Processing {country_name} ({iso_code}) ===")
+    
+    # Filter networks for this country
+    country_mask = (
+        (geoip_dataframe.get('country_iso_code') == iso_code) | 
+        (geoip_dataframe.get('country_name') == country_name)
+    )
+    
+    country_networks = (geoip_dataframe[country_mask]['network']
+                       .dropna()
+                       .astype(str)
+                       .tolist())
+    
+    logging.info(f"Found {len(country_networks)} networks for {country_name}")
+    
+    if len(country_networks) == 0:
+        logging.warning(f"No networks found for {country_name} ({iso_code})")
+        return [], {
+            'iso_code': iso_code,
+            'country_name': country_name,
+            'suffix': suffix,
+            'networks_found': 0,
+            'networks_optimized': 0,
+            'ips_matched': 0,
+            'output_file': None
+        }
+    
+    # Optimize networks
+    optimized_cidrs = collapse_networks(country_networks)
+    
+    if len(optimized_cidrs) == 0:
+        logging.warning(f"Network optimization resulted in empty list for {country_name}")
+        return [], {
+            'iso_code': iso_code,
+            'country_name': country_name,
+            'suffix': suffix,
+            'networks_found': len(country_networks),
+            'networks_optimized': 0,
+            'ips_matched': 0,
+            'output_file': None
+        }
+    
+    # Calculate batches for this country
+    total_input_ips = len(input_ip_list)
+    batches_per_worker = 4
+    total_desired_batches = optimal_workers * batches_per_worker
+    batch_size = max(1, total_input_ips // total_desired_batches)
+    
+    # Split input IPs into batches
+    ip_batches = []
+    for start_idx in range(0, total_input_ips, batch_size):
+        end_idx = min(start_idx + batch_size, total_input_ips)
+        batch = input_ip_list[start_idx:end_idx]
+        ip_batches.append(batch)
+    
+    # Process batches in parallel
+    filtered_ips = []
+    
+    try:
+        with ProcessPoolExecutor(
+            max_workers=optimal_workers,
+            initializer=_init_worker,
+            initargs=(optimized_cidrs,)
+        ) as process_executor:
+            
+            batch_results = process_executor.map(_process_ip_batch, ip_batches)
+            
+            for batch_result in batch_results:
+                filtered_ips.extend(batch_result)
+                
+    except Exception as parallel_error:
+        logging.error(f"Parallel processing failed for {country_name}: {parallel_error}")
+        logging.info("Falling back to single-threaded processing...")
+        
+        # Single-threaded fallback
+        fallback_tree = SubnetTree.SubnetTree()
+        for cidr in optimized_cidrs:
+            try:
+                fallback_tree[cidr] = True
+            except Exception:
+                continue
+        
+        for raw_ip in input_ip_list:
+            cleaned_ip = raw_ip.strip()
+            if not cleaned_ip:
+                continue
+                
+            try:
+                if '/' in cleaned_ip:
+                    network_obj = ipaddress.ip_network(cleaned_ip, strict=False)
+                    ip_to_check = str(network_obj.network_address)
+                else:
+                    ip_to_check = cleaned_ip
+                    
+            except Exception:
+                continue
+            
+            try:
+                if ip_to_check in fallback_tree:
+                    filtered_ips.append(cleaned_ip)
+            except Exception:
+                continue
+    
+    # Generate output filename
+    output_filename = f"aggregated-{iso_code.lower()}-only.txt"
+    output_path = f"/data/output/{output_filename}"
+    
+    # Write results to file
+    try:
+        Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+        with open(output_path, 'w') as output_file:
+            for ip_address in filtered_ips:
+                output_file.write(f"{ip_address}\n")
+        logging.info(f"Written {len(filtered_ips)} IPs to {output_path}")
+    except IOError as write_error:
+        logging.error(f"Failed to write {output_path}: {write_error}")
+        output_filename = None
+    
+    # Return results and statistics
+    stats = {
+        'iso_code': iso_code,
+        'country_name': country_name,
+        'suffix': suffix,
+        'networks_found': len(country_networks),
+        'networks_optimized': len(optimized_cidrs),
+        'ips_matched': len(filtered_ips),
+        'output_file': output_filename
+    }
+    
+    return filtered_ips, stats
+
+
+# =============================================================================
 # MAIN FILTERING LOGIC
 # =============================================================================
 
-def filter_us_ips_optimized():
+def filter_multi_country_ips():
     """
-    Main orchestration function that coordinates the entire IP filtering process.
+    Main orchestration function for multi-country IP filtering.
     
-    This function ties together all the components to create an efficient,
-    parallel IP filtering system. It handles the complete workflow from
-    data acquisition through final output.
-    
-    COMPLETE WORKFLOW:
-        1. Environment Setup & Validation
-        2. GeoIP Data Acquisition
-        3. Country Network Filtering
-        4. Network Optimization
-        5. Input Data Loading
-        6. Parallel Processing Setup
-        7. Batch Processing Execution
-        8. Results Aggregation
-        9. Output File Writing
-        10. Cleanup Operations
-    
-    PERFORMANCE OPTIMIZATIONS:
-        - Parallel processing with multiple workers
-        - SubnetTree for O(log n) lookups
-        - Network collapsing to reduce tree size
-        - Batch processing to reduce overhead
-        - Memory-efficient streaming where possible
-    
-    ERROR HANDLING:
-        - Graceful fallback to single-process mode
-        - Comprehensive logging at each stage
-        - Input validation and sanitization
-        - Resource cleanup even on failure
+    This enhanced version processes multiple countries in sequence,
+    generates individual output files for each country, creates a
+    combined multi-country file, and produces comprehensive statistics.
     """
+    
+    logging.info("=== MULTI-COUNTRY IP FILTERING PROCESS STARTED ===")
     
     # =========================================================================
     # STAGE 1: ENVIRONMENT SETUP AND VALIDATION
     # =========================================================================
     
-    logging.info("=== IP FILTERING PROCESS STARTED ===")
-    logging.info(f"Target Country: {country_name} ({country_iso_code})")
-    logging.info(f"Input File: {ALL_IPS_FROM_LISTS}")
-    logging.info(f"Output File: {COUNTRY_ONLY_IPS}")
+    # Detect all country configurations
+    country_configs = detect_country_configs()
+    
+    if not country_configs:
+        logging.error("No country configurations found. Please set COUNTRY_ISO_CODE_* variables.")
+        raise SystemExit(1)
+    
+    logging.info(f"Processing {len(country_configs)} countries")
+    for iso_code, country_name, suffix in country_configs:
+        logging.info(f"  - {country_name} ({iso_code}) [suffix: {suffix or 'legacy'}]")
     
     # =========================================================================
     # STAGE 2: GEOIP DATA ACQUISITION
     # =========================================================================
     
-    # Ensure we have the GeoIP database (download if needed)
     logging.info("Stage 1: Acquiring GeoIP database...")
     download_geoip_file()
     
@@ -444,7 +630,6 @@ def filter_us_ips_optimized():
     logging.info("Stage 2: Loading and validating GeoIP database...")
     
     try:
-        # Load the CSV file into a pandas DataFrame for easy manipulation
         geoip_dataframe = pd.read_csv(GEOIP_CSV_PATH)
         logging.info(f"GeoIP database loaded: {len(geoip_dataframe)} total entries")
         
@@ -452,60 +637,18 @@ def filter_us_ips_optimized():
         logging.error(f"Failed to load GeoIP CSV file: {csv_error}")
         raise SystemExit(1)
     
-    # Validate that the CSV has the required 'network' column
     if 'network' not in geoip_dataframe.columns:
         logging.error("GeoIP CSV missing required 'network' column")
         logging.error(f"Available columns: {list(geoip_dataframe.columns)}")
         raise SystemExit(1)
     
     # =========================================================================
-    # STAGE 4: COUNTRY NETWORK FILTERING
+    # STAGE 4: INPUT DATA LOADING
     # =========================================================================
     
-    logging.info("Stage 3: Filtering networks by country...")
-    
-    # Create a boolean mask for rows matching our target country
-    # We check both ISO code and country name to maximize matches
-    country_mask = (
-        (geoip_dataframe.get('country_iso_code') == country_iso_code) | 
-        (geoip_dataframe.get('country_name') == country_name)
-    )
-    
-    # Extract the network CIDRs for matching countries
-    country_networks = (geoip_dataframe[country_mask]['network']
-                       .dropna()                    # Remove any NaN values
-                       .astype(str)                 # Ensure string format
-                       .tolist())                   # Convert to list
-    
-    logging.info(f"Found {len(country_networks)} networks for {country_name}")
-    
-    # Validate that we found some networks
-    if len(country_networks) == 0:
-        logging.error(f"No networks found for country '{country_name}' ({country_iso_code})")
-        logging.error("Check country name/code or GeoIP data quality")
-        raise SystemExit(1)
-    
-    # =========================================================================
-    # STAGE 5: NETWORK OPTIMIZATION
-    # =========================================================================
-    
-    logging.info("Stage 4: Optimizing network list...")
-    
-    # Collapse overlapping networks to improve performance
-    optimized_cidrs = collapse_networks(country_networks)
-    
-    if len(optimized_cidrs) == 0:
-        logging.error("Network optimization resulted in empty list")
-        raise SystemExit(1)
-    
-    # =========================================================================
-    # STAGE 6: INPUT DATA LOADING
-    # =========================================================================
-    
-    logging.info("Stage 5: Loading input IP list...")
+    logging.info("Stage 3: Loading input IP list...")
     
     try:
-        # Load the input IP list, removing empty lines and whitespace
         with open(ALL_IPS_FROM_LISTS, 'r') as input_file:
             input_ip_list = [line.rstrip('\n') for line in input_file if line.strip()]
             
@@ -519,149 +662,162 @@ def filter_us_ips_optimized():
     total_input_ips = len(input_ip_list)
     logging.info(f"Loaded {total_input_ips} IP entries for processing")
     
-    # Early exit if no IPs to process
     if total_input_ips == 0:
-        logging.info("No IPs to process. Creating empty output file.")
-        Path(COUNTRY_ONLY_IPS).parent.mkdir(parents=True, exist_ok=True)
-        Path(COUNTRY_ONLY_IPS).touch()  # Create empty file
+        logging.info("No IPs to process. Exiting.")
         return
     
     # =========================================================================
-    # STAGE 7: PARALLEL PROCESSING SETUP
+    # STAGE 5: PARALLEL PROCESSING SETUP
     # =========================================================================
     
-    logging.info("Stage 6: Setting up parallel processing...")
+    logging.info("Stage 4: Setting up parallel processing...")
     
-    # Determine optimal number of worker processes
     system_cpu_count = mp.cpu_count()
-    # Use override if specified, otherwise use CPU count but cap at 4 for memory efficiency
     optimal_workers = min(NUM_WORKERS_OVERRIDE or system_cpu_count, 4)
     
-    # Calculate batch size for optimal load distribution
-    # More batches than workers ensures good load balancing
-    batches_per_worker = 4
-    total_desired_batches = optimal_workers * batches_per_worker
-    batch_size = max(1, total_input_ips // total_desired_batches)
-    
-    # Split input IPs into batches for parallel processing
-    ip_batches = []
-    for start_idx in range(0, total_input_ips, batch_size):
-        end_idx = min(start_idx + batch_size, total_input_ips)
-        batch = input_ip_list[start_idx:end_idx]
-        ip_batches.append(batch)
-    
-    logging.info(f"Processing configuration:")
-    logging.info(f"  - Workers: {optimal_workers}")
-    logging.info(f"  - Batches: {len(ip_batches)}")
-    logging.info(f"  - Average batch size: {batch_size}")
-    logging.info(f"  - Total IPs: {total_input_ips}")
+    logging.info(f"Using {optimal_workers} worker processes")
     
     # =========================================================================
-    # STAGE 8: PARALLEL BATCH PROCESSING
+    # STAGE 6: PROCESS EACH COUNTRY
     # =========================================================================
     
-    logging.info("Stage 7: Processing IP batches in parallel...")
+    logging.info("Stage 5: Processing countries...")
     
-    filtered_ips = []  # Accumulator for all matching IPs
+    all_country_results = []
+    country_statistics = []
+    all_filtered_ips = set()  # Use set to avoid duplicates in combined file
     
+    for iso_code, country_name, suffix in country_configs:
+        filtered_ips, stats = process_single_country(
+            iso_code, country_name, suffix, geoip_dataframe, 
+            input_ip_list, optimal_workers
+        )
+        
+        all_country_results.append((iso_code, country_name, filtered_ips))
+        country_statistics.append(stats)
+        
+        # Add to combined set (automatically deduplicates)
+        all_filtered_ips.update(filtered_ips)
+        
+        logging.info(f"Completed {country_name}: {len(filtered_ips)} IPs")
+    
+    # =========================================================================
+    # STAGE 7: CREATE COMBINED MULTI-COUNTRY FILE
+    # =========================================================================
+    
+    logging.info("Stage 6: Creating combined multi-country file...")
+    
+    # Create combined filename
+    country_codes = [iso.lower() for iso, _, _ in country_configs]
+    if len(country_codes) <= 3:
+        combined_suffix = "-".join(country_codes)
+    else:
+        combined_suffix = f"multi-{len(country_codes)}countries"
+    
+    combined_filename = f"aggregated-{combined_suffix}-combined.txt"
+    combined_path = f"/data/output/{combined_filename}"
+    
+    # Write combined file
     try:
-        # Create ProcessPoolExecutor with worker initialization
-        with ProcessPoolExecutor(
-            max_workers=optimal_workers,
-            initializer=_init_worker,           # Function to call in each worker
-            initargs=(optimized_cidrs,)         # Arguments for initializer
-        ) as process_executor:
-            
-            logging.info("Submitting batches to worker processes...")
-            
-            # Process all batches and collect results
-            batch_results = process_executor.map(_process_ip_batch, ip_batches)
-            
-            # Aggregate results from all batches
-            for batch_result in batch_results:
-                filtered_ips.extend(batch_result)
-            
-            logging.info("All batches processed successfully")
-            
-    except Exception as parallel_error:
-        # If parallel processing fails, fall back to single-threaded processing
-        logging.error(f"Parallel processing failed: {parallel_error}")
-        logging.info("Falling back to single-threaded processing...")
-        
-        # Build SubnetTree for single-threaded fallback
-        fallback_tree = SubnetTree.SubnetTree()
-        for cidr in optimized_cidrs:
-            try:
-                fallback_tree[cidr] = True
-            except Exception:
-                continue  # Skip malformed CIDRs
-        
-        # Process each IP individually
-        for raw_ip in input_ip_list:
-            cleaned_ip = raw_ip.strip()
-            if not cleaned_ip:
-                continue
-                
-            try:
-                # Determine IP to check (same logic as worker function)
-                if '/' in cleaned_ip:
-                    network_obj = ipaddress.ip_network(cleaned_ip, strict=False)
-                    ip_to_check = str(network_obj.network_address)
-                else:
-                    ip_to_check = cleaned_ip
-                    
-            except Exception:
-                continue  # Skip malformed IPs
-            
-            try:
-                # Check against SubnetTree
-                if ip_to_check in fallback_tree:
-                    filtered_ips.append(cleaned_ip)
-            except Exception:
-                continue  # Skip lookup errors
-        
-        logging.info("Single-threaded fallback processing completed")
-    
-    # =========================================================================
-    # STAGE 9: RESULTS PROCESSING AND OUTPUT
-    # =========================================================================
-    
-    logging.info("Stage 8: Writing filtered results...")
-    
-    # Ensure output directory exists
-    output_path = Path(COUNTRY_ONLY_IPS)
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    
-    # Write filtered IPs to output file
-    try:
-        with open(COUNTRY_ONLY_IPS, 'w') as output_file:
-            for ip_address in filtered_ips:
-                output_file.write(f"{ip_address}\n")
-                
-        logging.info(f"Successfully wrote {len(filtered_ips)} filtered IPs to {COUNTRY_ONLY_IPS}")
-        
+        Path(combined_path).parent.mkdir(parents=True, exist_ok=True)
+        with open(combined_path, 'w') as combined_file:
+            for ip_address in sorted(all_filtered_ips):  # Sort for consistency
+                combined_file.write(f"{ip_address}\n")
+        logging.info(f"Written {len(all_filtered_ips)} unique IPs to {combined_path}")
     except IOError as write_error:
-        logging.error(f"Failed to write output file: {write_error}")
-        raise SystemExit(1)
+        logging.error(f"Failed to write combined file: {write_error}")
+        combined_filename = None
     
     # =========================================================================
-    # STAGE 10: CLEANUP AND REPORTING
+    # STAGE 8: GENERATE COMPREHENSIVE STATISTICS
     # =========================================================================
     
-    logging.info("Stage 9: Cleanup and final reporting...")
+    logging.info("Stage 7: Generating statistics...")
     
-    # Calculate and report filtering statistics
-    input_count = total_input_ips
-    output_count = len(filtered_ips)
-    filter_rate = (output_count / input_count * 100) if input_count > 0 else 0
+    # Create detailed statistics file
+    stats_path = "/data/output/stats.md"
     
-    logging.info("=== FILTERING RESULTS ===")
-    logging.info(f"Input IPs: {input_count:,}")
-    logging.info(f"Filtered IPs: {output_count:,}")
-    logging.info(f"Filter Rate: {filter_rate:.2f}%")
-    logging.info(f"Country: {country_name} ({country_iso_code})")
+    try:
+        with open(stats_path, 'w') as stats_file:
+            stats_file.write("# Multi-Country IP Aggregation Statistics\n\n")
+            stats_file.write(f"**Last Updated:** {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S UTC')}\n\n")
+            
+            # Overall summary
+            stats_file.write("## Overall Summary\n\n")
+            stats_file.write(f"- **Total Input IPs:** {total_input_ips:,}\n")
+            stats_file.write(f"- **Countries Processed:** {len(country_configs)}\n")
+            stats_file.write(f"- **Combined Unique IPs:** {len(all_filtered_ips):,}\n")
+            if combined_filename:
+                stats_file.write(f"- **Combined Output File:** `{combined_filename}`\n")
+            
+            combined_percentage = (len(all_filtered_ips) / total_input_ips * 100) if total_input_ips > 0 else 0
+            stats_file.write(f"- **Overall Filter Rate:** {combined_percentage:.2f}%\n\n")
+            
+            # Per-country breakdown
+            stats_file.write("## Per-Country Results\n\n")
+            stats_file.write("| Country | Code | Networks Found | Networks Optimized | IPs Matched | Filter Rate | Output File |\n")
+            stats_file.write("|---------|------|----------------|--------------------|-----------|-----------|-----------|\n")
+            
+            for stats in country_statistics:
+                filter_rate = (stats['ips_matched'] / total_input_ips * 100) if total_input_ips > 0 else 0
+                output_file = stats['output_file'] if stats['output_file'] else "❌ Failed"
+                stats_file.write(f"| {stats['country_name']} | {stats['iso_code']} | "
+                               f"{stats['networks_found']:,} | {stats['networks_optimized']:,} | "
+                               f"{stats['ips_matched']:,} | {filter_rate:.2f}% | `{output_file}` |\n")
+            
+            stats_file.write("\n")
+            
+            # IP Sources
+            stats_file.write("## IP Sources\n\n")
+            env_vars = dict(os.environ)
+            list_vars = [(k, v) for k, v in env_vars.items() if k.startswith('LIST_')]
+            list_vars.sort(key=lambda x: int(x[0].split('_')[1]) if x[0].split('_')[1].isdigit() else 999)
+            
+            for var_name, url in list_vars:
+                list_num = var_name.replace('LIST_', '')
+                stats_file.write(f"- **Source {list_num}:** {url}\n")
+            
+            stats_file.write("\n")
+            
+            # Configuration details
+            stats_file.write("## Configuration Details\n\n")
+            stats_file.write("### Countries Configured\n\n")
+            for iso_code, country_name, suffix in country_configs:
+                suffix_display = f" (#{suffix})" if suffix else " (legacy)"
+                stats_file.write(f"- **{country_name}** ({iso_code}){suffix_display}\n")
+                       
+            # File sizes and technical info
+            stats_file.write("\n### Output Files Generated\n\n")
+            for stats in country_statistics:
+                if stats['output_file']:
+                    stats_file.write(f"- `{stats['output_file']}` - {stats['ips_matched']:,} IPs for {stats['country_name']}\n")
+            if combined_filename:
+                stats_file.write(f"- `{combined_filename}` - {len(all_filtered_ips):,} unique IPs (combined)\n")
+        
+        logging.info(f"Statistics written to {stats_path}")
+        
+    except IOError as stats_error:
+        logging.error(f"Failed to write statistics file: {stats_error}")
     
-    # Clean up GeoIP directory to force fresh download next time
+    # =========================================================================
+    # STAGE 9: CLEANUP AND FINAL REPORTING
+    # =========================================================================
+    
+    logging.info("Stage 8: Final reporting and cleanup...")
+    
+    # Console summary
+    logging.info("=== MULTI-COUNTRY FILTERING RESULTS ===")
+    logging.info(f"Input IPs: {total_input_ips:,}")
+    logging.info(f"Countries: {len(country_configs)}")
+    logging.info(f"Combined Unique IPs: {len(all_filtered_ips):,}")
+    logging.info(f"Overall Filter Rate: {combined_percentage:.2f}%")
+    
+    logging.info("\nPer-Country Summary:")
+    for stats in country_statistics:
+        filter_rate = (stats['ips_matched'] / total_input_ips * 100) if total_input_ips > 0 else 0
+        logging.info(f"  {stats['country_name']} ({stats['iso_code']}): {stats['ips_matched']:,} IPs ({filter_rate:.2f}%)")
+    
+    # Clean up GeoIP directory
     geoip_directory = Path(GEOIP_CSV_PATH).parent
     if geoip_directory.exists() and geoip_directory.is_dir():
         try:
@@ -670,9 +826,8 @@ def filter_us_ips_optimized():
             logging.info("GeoIP directory removed successfully")
         except Exception as cleanup_error:
             logging.warning(f"Failed to remove GeoIP directory: {cleanup_error}")
-            logging.warning("Manual cleanup may be required")
     
-    logging.info("=== IP FILTERING PROCESS COMPLETED ===")
+    logging.info("=== MULTI-COUNTRY IP FILTERING PROCESS COMPLETED ===")
 
 
 # =============================================================================
@@ -681,24 +836,19 @@ def filter_us_ips_optimized():
 
 if __name__ == "__main__":
     """
-    Script entry point - sets up logging and starts the filtering process.
-    
-    This block only runs when the script is executed directly (not imported).
-    It configures logging for visibility into the filtering process and
-    calls the main filtering function.
+    Script entry point - sets up logging and starts the multi-country filtering process.
     """
     
     # Configure logging for informative output
-    # Format includes log level and message for easy reading
     logging.basicConfig(
         level=logging.INFO,
         format='[%(levelname)s] %(message)s',
         datefmt='%Y-%m-%d %H:%M:%S'
     )
     
-    # Start the IP filtering process
+    # Start the multi-country IP filtering process
     try:
-        filter_us_ips_optimized()
+        filter_multi_country_ips()
     except KeyboardInterrupt:
         logging.info("Process interrupted by user")
         raise SystemExit(130)  # Standard exit code for Ctrl+C
