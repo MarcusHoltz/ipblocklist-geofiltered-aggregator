@@ -1,22 +1,39 @@
-name: IP Aggregation & Filtering
+name: Generate a New Blocklist
+
 #-------------------------------------------------------------------#
 ##  ##  ##          DONT FORGET TO CHANGE:                 ##  ##  ## 
 ##  ##  ##    settings > actions > workflow permissions    ##  ##  ##
 ##  ##  ##    Set to "Read and write permissions"          ##  ##  ##
 #-------------------------------------------------------------------#
 
+permissions:
+  contents: write
+  actions: read
+
 on:
   # Scheduled runs - daily at 2:17 AM UTC (using prime number)
   schedule:
+     #        ┌───────────── minute (0 - 59)
+     #        │ ┌───────────── hour (0 - 23)
+     #        │ │ ┌───────────── day of month (1 - 31)
+     #        │ │ │ ┌───────────── month (1 - 12 or JAN-DEC)
+     #        │ │ │ │ ┌───────────── day of week (0 - 6) (SUN-SAT, 0 = SUN)
+     #        │ │ │ │ │
+     #        * * * * *
     - cron: "17 2 * * *"
-  
+     # Scheduled run above - daily at 2:17 AM UTC (using prime number for odd time)
+     #  cron: "37 13 * * 6"
+     # Example run above - Saturday at 13:37 UTC (7:37am MDT, once a week, on Sunday)
+     #  cron: "7 6 */2 * *"
+     # Example run above - Every other day at 6:07am UTC (days of the month divisible by 2, even days)
+
   # Trigger on .env file changes
   push:
     paths:
       - '.env'
       - 'Dockerfile'
       - 'docker-compose.yml'
-      - 'filter_us_ips.py'
+      - 'filter_ips.py'
       - 'run.sh'
       - '.github/workflows/ip-aggregation.yml'
     branches: [ "main", "master" ]
@@ -35,8 +52,36 @@ env:
   TZ: UTC
 
 jobs:
-  aggregate-ips:
+  permission-check:
     runs-on: ubuntu-latest
+    steps:
+      - name: Check workflow permissions setup
+        run: |
+          # Show reminder on first few runs or if this is an initial commit
+          if [ "${{ github.run_number }}" -le 3 ] || [ "${{ github.event.head_commit.message }}" == *"Initial commit"* ]; then
+            echo "#-------------------------------------------------------------------#"
+            echo "##  ##  ##          DONT FORGET TO CHANGE:                 ##  ##  ##"
+            echo "##  ##  ##    settings > actions > workflow permissions    ##  ##  ##"
+            echo "##  ##  ##    Set to \"Read and write permissions\"          ##  ##  ##"
+            echo "#-------------------------------------------------------------------#"
+            echo ""
+            echo "ℹ️  This reminder will show for the first 3 workflow runs."
+            echo "   After configuring permissions, this workflow will run normally."
+            echo ""
+            
+            # Exit successfully but skip main workflow if this is run #1
+            if [ "${{ github.run_number }}" -eq 1 ]; then
+              echo "⚠️  Skipping main workflow on first run. Please configure permissions first."
+              echo "   You can re-run this workflow manually after setting permissions."
+              exit 0
+            fi
+          fi
+
+  aggregate-ips:
+    needs: permission-check
+    runs-on: ubuntu-latest
+    # Only run if it's not the very first run, or if manually triggered
+    if: github.run_number > 1 || github.event_name == 'workflow_dispatch'
     
     steps:
       - name: Checkout repository
@@ -83,21 +128,28 @@ jobs:
             echo "❌ aggregated.txt not found!"
           fi
           
-          if [ -f "data/output/aggregated-us-only.txt" ]; then
-            echo "US-filtered IPs: $(wc -l < data/output/aggregated-us-only.txt) lines"
-            echo "First 5 US IPs:"
-            head -5 data/output/aggregated-us-only.txt
+          # Get country code from .env file for dynamic filename
+          COUNTRY_CODE=$(grep "^COUNTRY_ISO_CODE=" .env | cut -d= -f2 | tr '[:upper:]' '[:lower:]')
+          COUNTRY_FILE="data/output/aggregated-${COUNTRY_CODE}-only.txt"
+          
+          if [ -f "$COUNTRY_FILE" ]; then
+            echo "Country-filtered IPs ($COUNTRY_CODE): $(wc -l < "$COUNTRY_FILE") lines"
+            echo "First 5 country-filtered IPs:"
+            head -5 "$COUNTRY_FILE"
           else
-            echo "❌ aggregated-us-only.txt not found!"
+            echo "❌ $COUNTRY_FILE not found!"
+            echo "Looking for any country-filtered files:"
+            ls -la data/output/aggregated-*-only.txt 2>/dev/null || echo "No country-filtered files found"
           fi
           
-          if [ -f "data/output/invalid_ips.log" ]; then
-            echo "Invalid IPs logged: $(wc -l < data/output/invalid_ips.log) lines"
-          fi
-
       - name: Generate statistics and README
         run: |
           echo "=== Generating Statistics ==="
+          
+          # Get country info from .env
+          COUNTRY_CODE=$(grep "^COUNTRY_ISO_CODE=" .env | cut -d= -f2)
+          COUNTRY_NAME=$(grep "^COUNTRY_NAME=" .env | cut -d= -f2)
+          COUNTRY_FILE="data/output/aggregated-$(echo $COUNTRY_CODE | tr '[:upper:]' '[:lower:]')-only.txt"
           
           # Create statistics file
           cat > data/output/stats.md << EOF
@@ -113,13 +165,15 @@ jobs:
             echo "- **Total Aggregated IPs:** $TOTAL_IPS" >> data/output/stats.md
           fi
           
-          if [ -f "data/output/aggregated-us-only.txt" ]; then
-            US_IPS=$(wc -l < data/output/aggregated-us-only.txt)
-            echo "- **US-Only IPs:** $US_IPS" >> data/output/stats.md
+          if [ -f "$COUNTRY_FILE" ]; then
+            COUNTRY_IPS=$(wc -l < "$COUNTRY_FILE")
+            echo "- **${COUNTRY_NAME} IPs:** $COUNTRY_IPS" >> data/output/stats.md
             if [ -f "data/output/aggregated.txt" ]; then
               TOTAL_IPS=$(wc -l < data/output/aggregated.txt)
-              PERCENTAGE=$(echo "scale=2; $US_IPS * 100 / $TOTAL_IPS" | bc -l)
-              echo "- **US Percentage:** ${PERCENTAGE}%" >> data/output/stats.md
+              if [ "$TOTAL_IPS" -gt 0 ]; then
+                PERCENTAGE=$(echo "scale=2; $COUNTRY_IPS * 100 / $TOTAL_IPS" | bc -l 2>/dev/null || echo "0")
+                echo "- **${COUNTRY_NAME} Percentage:** ${PERCENTAGE}%" >> data/output/stats.md
+              fi
             fi
           fi
           
@@ -130,12 +184,12 @@ jobs:
           
           echo "" >> data/output/stats.md
           echo "## Sources" >> data/output/stats.md
-          grep "^URL_" .env | sed 's/URL_[0-9]*=/- /' >> data/output/stats.md
+          grep "^LIST_" .env | sed 's/LIST_[0-9]*=/- /' >> data/output/stats.md
           
           echo "" >> data/output/stats.md
           echo "## Configuration" >> data/output/stats.md
-          echo "- **Country Filter:** $(grep COUNTRY_NAME .env | cut -d= -f2)" >> data/output/stats.md
-          echo "- **Country Code:** $(grep COUNTRY_ISO_CODE .env | cut -d= -f2)" >> data/output/stats.md
+          echo "- **Country Filter:** $COUNTRY_NAME" >> data/output/stats.md
+          echo "- **Country Code:** $COUNTRY_CODE" >> data/output/stats.md
           
           # Display the statistics
           cat data/output/stats.md
@@ -145,12 +199,15 @@ jobs:
           echo "=== Updating Main README ==="
           
           cat > README.md << 'EOF'
-          # IP Aggregation & Filtering
+          # Country Based IP Address Internet Blocklist Aggregator
           
           ![Workflow Status](https://github.com/${{ github.repository }}/actions/workflows/ip-aggregation.yml/badge.svg)
           ![Docker](https://badgen.net/badge/icon/docker?icon=docker&label)
-          ![License](https://badgen.net/badge/license/MIT/blue)
-          
+          ![Github Actions](https://badgen.net/badge/icon/github?icon=github&label)
+          ![Issues](https://img.shields.io/github/issues/${{ github.repository }})
+          ![Forks](https://img.shields.io/github/forks/${{ github.repository }})
+          ![Forks](https://img.shields.io/github/forks/${{ github.repository_owner }}/${{ github.repository }})
+                    
           **Automated IP blocklist aggregation and geographical filtering**
           
           ---
@@ -158,7 +215,7 @@ jobs:
           ## 🚀 Features
           
           - **Automated Aggregation**: Combines multiple IP blocklists into a single deduplicated list
-          - **Geographical Filtering**: Filters IPs by country (default: US-only)
+          - **Geographical Filtering**: Filters IPs by country (configurable via .env)
           - **Docker Support**: Runs in containerized environment for consistency
           - **GitHub Actions**: Automated daily updates with manual trigger support
           - **Multi-source**: Supports multiple URL sources via environment configuration
@@ -176,42 +233,67 @@ jobs:
           
           ---
           
+          ## 🛴 Install
+          
+          Set up your own copy of this repository to aggregate and filter your IP blocklists and country. 
+          
+          * * *
+          
+          ### 👆 Click the green "Use this template" button in the upper right corner
+          
+                   
+          1. Sign in to GitHub and navigate to [this repository](https://github.com/${{ github.repository }}).
+          2. Click the **"Use this template"** button (in the upper right corner).
+          3. Select **Create a new repository**. Enter a name (e.g., `my-badip-blocklist`), and confirm.
+          4. Your new repository is now independent — it will not share commit history with the original.
+          5. You can immediately begin editing or configuring it for your own IP aggregation project.
+          
+          > The **"Use this template"** button on GitHub allows you to quickly create a new, independent repository pre-populated with the project's files and structure. Your new repository won't inherit commit history from the template, making it ideal for fresh projects and maintaining consistency across teams or assignments.
+          
+          *Usage is below for steps on running this repository with Github Actions in your new IP aggregation project.*
+
+          
           ## 🛠 Usage
           
-          ### GitHub Actions (Automated)
+          ### GitHub Actions (Recommended)
           
-          1. **Enable Actions**: Go to `Settings > Actions > General > Workflow permissions`
+          #### First Step - Enable Write Permissions
+
+          1. **Enable Actions**: Go to Settings > Actions > General > Workflow permissions
           2. **Set Permissions**: Select "Read and write permissions"
+
+          
+          #### Second Step - Configure The Repo
+
           3. **Configure Environment**: Edit `.env` file with your desired sources and settings
-          4. **Automatic Runs**: The workflow runs daily at 02:17 UTC
-          5. **Manual Trigger**: Use the "Actions" tab to run manually when needed
+          4. **Your Country Here**: You can find your country code and name in the [geoip2-ipv4 spreadsheet](https://datahub.io/core/geoip2-ipv4)
+          5. **Automatic Runs**: The workflow runs daily at **02:17 UTC** or anytime if you [modified the cron file](https://github.com/${{ github.repository }}/edit/main/.github/workflows/ip-aggregation.yml)
+
+
+          #### Third Step - Running This Action
+
+          6. **Run This Now**: You can run this Github Action by using the "Action" tab up top
+          7. **Generate a New Blocklist Github Action**: Under "All workflows" you can find is button
+          8. **Run workflow**: On this page, off to the right is a button with a dropdown to "Run workflow"
+          9. **Off to the races**: Each run will consume some of your free monthly Github Actions 2000 min (33.3 hours)
+          10. **Estimator**: Github Actions logs will estimate the time consumption before each run
           
-          ### Local Development
+          > Anything over 26 million combined IPs in blacklists will begin to exhaust your free Github Action minutes on a daily cron routine for this repo. Please adjust cron based on blacklist quantity.
           
-          ```bash
-          # Clone the repository
-          git clone https://github.com/${{ github.repository }}.git
-          cd ip-aggregator
+          ## ⚙ Configuration
           
-          # Configure your sources in .env
-          cp .env.example .env
-          vim .env
+          Find your `.env`, it is in the base (root) directory of this project, it will allow you to:
           
-          # Run with Docker Compose
-          docker compose up --build
-          
-          # Check results
-          ls -la data/output/
-          ```
-          
-          ### Configuration
-          
-          Edit `.env` to customize:
+          - Add some IP blocklists
+
+          - Set the country to filter for
+
+          ### Sample .env file
           
           ```bash
           # Add your IP list sources
-          URL_1=https://example.com/blocklist1.txt
-          URL_2=https://example.com/blocklist2.txt
+          LIST_1=https://example.com/blocklist1.txt
+          LIST_2=https://example.com/blocklist2.txt
           
           # Set country filtering
           COUNTRY_ISO_CODE=US
@@ -219,14 +301,50 @@ jobs:
           
           # Configure paths (usually don't need to change)
           GEOIP_CSV_PATH=/data/geoip/geoip2-ipv4.csv
-          OUTPUT_PATH=/data/output/aggregated-us-only.txt
           INPUT_PATH=/data/output/aggregated.txt
           ```
+          
+          ## 🏠 Local Deployment (Alternative)
+          
+          If you'd rather download this repo and run this project offline, the instructions are below:
+          
+          ### 1. Clone the repository
+          
+          The first step is to download the files from the internet, and get them locally on your machine.
+          
+          ```bash
+          git clone https://github.com/${{ github.repository }}.git
+          ```
+          
+          ### 2. Configure your sources in .env
+          
+          The next step is to configure the project to your liking. Edit your `.env` file. You can enter as many IP based block lists as you need and change the country to filter.
+          
+          ```bash
+          nano .env
+          ```
+
+          ### 3. Run with Docker Compose
+          
+          You can now run the project and see what happens.
+
+          ```bash
+          docker compose up --build
+          ```
+          
+          ### 4. Check results
+          
+          Let's see what happened!
+          
+          ```bash
+          ls -la data/output/
+          ```
+          
           
           ## 📁 Output Files
           
           - `data/output/aggregated.txt` - All deduplicated IPs from all sources
-          - `data/output/aggregated-us-only.txt` - US-filtered IPs only
+          - `data/output/aggregated-{country-code}-only.txt` - Country-filtered IPs (e.g., aggregated-us-only.txt)
           - `data/output/stats.md` - Processing statistics and metadata
           - `data/output/invalid_ips.log` - Log of invalid entries encountered
           
@@ -240,22 +358,51 @@ jobs:
           
           ## ⚡ Performance
           
-          - **Processing Speed**: ~450 IPs per second for filtering
+          - **Processing Speed**: ~10,000 IPs per second for filtering
           - **Parallel Processing**: Multi-core optimization for large datasets
           - **Memory Efficient**: Streaming processing for large files
           - **Optimized Lookup**: Integer-based IP range matching
           
-          ## 🤝 Contributing
+          ## 🌼 Features and Optimizations
           
-          1. Fork the repository
-          2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-          3. Commit your changes (`git commit -m 'Add amazing feature'`)
-          4. Push to the branch (`git push origin feature/amazing-feature`)
-          5. Open a Pull Request
+          - **Automated IP blocklist aggregation** for network security enhancement  
+          - **Geolocation-based IP filtering** with precise country-specific blocklists  
+          - **Containerized deployment** using Docker for consistent and scalable execution  
+          - **Automated updates via GitHub Actions** to maintain up-to-date IP threat intelligence  
+          - **Country-level threat mitigation** with configurable IP filtering rules  
+
+
+          ## 👍 Acknowledgements
           
-          ---
+          This project would not have been possible without the amazing work of the following other projects:
+
+          * * *
           
-          **Last updated automatically:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+          ### 🎩 Datopian
+          
+          Thank you to [Datopian](https://github.com/datasets/geoip2-ipv4) for maintaining the [GeoIP2 IPv4 dataset](https://datahub.io/core/geoip2-ipv4). This dataset provides otherwise impossible information for IP geolocation, allowing this project to filter IPs based on country.
+          
+          - [GeoIP2 IPv4 Dataset](https://datahub.io/core/geoip2-ipv4) by Datopian is essential for filtering and identifying IP addresses in various countries, including the dynamic use of country codes in this project.
+
+          
+          * * *
+
+          ### 🦘 Andrew Twin
+          
+          Special thanks to [Andrew Twin](https://github.com/andrewtwin) for creating and sharing the [IP Aggregator](https://github.com/andrewtwin/ip-aggregator) project. Andrew's work on efficiently aggregating IP blocklists was a fundamental inspiration and foundation for this project.
+          
+          - The [IP Aggregator](https://github.com/andrewtwin/ip-aggregator) allows easy downloading, parsing, and filtering of multiple IP blocklists, which this project leverages to streamline and automate IP management tasks.
+
+          
+          * * *
+          
+          ### 📗 Blocklist maintainers
+          
+          I would like to additionally acknowledge the maintainers and contributors of various [IP blocklists](https://github.com/topics/ip-blocklist) and [IP blacklists](https://github.com/topics/ip-blacklist). Thank you for maintaining up-to-date, community-driven threat intelligence that are the foundation of generating this file. While the specific lists in this repo may vary, the collective dedication to improving online security and privacy of all contributors is deeply appreciated.
+          
+          
+          * * *
+          
           EOF
 
       - name: Upload artifacts
@@ -264,7 +411,7 @@ jobs:
           name: "ip-aggregation-results-${{ github.run_number }}"
           path: |
             data/output/aggregated.txt
-            data/output/aggregated-us-only.txt
+            data/output/aggregated-*-only.txt
             data/output/stats.md
             data/output/invalid_ips.log
           retention-days: 30
@@ -288,10 +435,14 @@ jobs:
             # Create commit with timestamp and stats
             COMMIT_MSG="🤖 Auto-update IP lists - $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
             
-            if [ -f "data/output/aggregated.txt" ] && [ -f "data/output/aggregated-us-only.txt" ]; then
+            # Get country code and construct filename dynamically
+            COUNTRY_CODE=$(grep "^COUNTRY_ISO_CODE=" .env | cut -d= -f2 | tr '[:upper:]' '[:lower:]')
+            COUNTRY_FILE="data/output/aggregated-${COUNTRY_CODE}-only.txt"
+            
+            if [ -f "data/output/aggregated.txt" ] && [ -f "$COUNTRY_FILE" ]; then
               TOTAL=$(wc -l < data/output/aggregated.txt)
-              US_ONLY=$(wc -l < data/output/aggregated-us-only.txt)
-              COMMIT_MSG="$COMMIT_MSG - Total: $TOTAL, US: $US_ONLY"
+              COUNTRY_ONLY=$(wc -l < "$COUNTRY_FILE")
+              COMMIT_MSG="$COMMIT_MSG - Total: $TOTAL, $(echo $COUNTRY_CODE | tr '[:lower:]' '[:upper:]'): $COUNTRY_ONLY"
             fi
             
             git commit -m "$COMMIT_MSG"
