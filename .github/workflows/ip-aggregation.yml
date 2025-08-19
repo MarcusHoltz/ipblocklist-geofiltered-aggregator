@@ -1,0 +1,311 @@
+name: IP Aggregation & Filtering
+#-------------------------------------------------------------------#
+##  ##  ##          DONT FORGET TO CHANGE:                 ##  ##  ## 
+##  ##  ##    settings > actions > workflow permissions    ##  ##  ##
+##  ##  ##    Set to "Read and write permissions"          ##  ##  ##
+#-------------------------------------------------------------------#
+
+on:
+  # Scheduled runs - daily at 2:17 AM UTC (using prime number)
+  schedule:
+    - cron: "17 2 * * *"
+  
+  # Trigger on .env file changes
+  push:
+    paths:
+      - '.env'
+      - 'Dockerfile'
+      - 'docker-compose.yml'
+      - 'filter_us_ips.py'
+      - 'run.sh'
+      - '.github/workflows/ip-aggregation.yml'
+    branches: [ "main", "master" ]
+  
+  # Allow manual triggering
+  workflow_dispatch:
+    inputs:
+      force_run:
+        description: 'Force run even if no changes'
+        required: false
+        default: 'false'
+        type: boolean
+
+env:
+  # Set timezone for consistent logging
+  TZ: UTC
+
+jobs:
+  aggregate-ips:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Fetch full history for better git operations
+          fetch-depth: 0
+
+      - name: Set up environment
+        run: |
+          # Create necessary directories
+          mkdir -p data/input data/output data/geoip
+          
+          # Show initial repository state
+          echo "=== Repository Structure ==="
+          ls -la
+          
+          echo "=== Environment File ==="
+          cat .env
+
+      - name: Build Docker image
+        run: |
+          echo "=== Building Docker Image ==="
+          docker build --tag ip-aggregator:latest .
+
+      - name: Run IP aggregation
+        run: |
+          echo "=== Starting IP Aggregation Process ==="
+          # Run the Docker container
+          docker compose up --build
+          
+          echo "=== Process Complete ==="
+
+      - name: Verify outputs
+        run: |
+          echo "=== Checking Output Files ==="
+          ls -la data/output/
+          
+          if [ -f "data/output/aggregated.txt" ]; then
+            echo "Aggregated IPs: $(wc -l < data/output/aggregated.txt) lines"
+            echo "First 5 aggregated IPs:"
+            head -5 data/output/aggregated.txt
+          else
+            echo "❌ aggregated.txt not found!"
+          fi
+          
+          if [ -f "data/output/aggregated-us-only.txt" ]; then
+            echo "US-filtered IPs: $(wc -l < data/output/aggregated-us-only.txt) lines"
+            echo "First 5 US IPs:"
+            head -5 data/output/aggregated-us-only.txt
+          else
+            echo "❌ aggregated-us-only.txt not found!"
+          fi
+          
+          if [ -f "data/output/invalid_ips.log" ]; then
+            echo "Invalid IPs logged: $(wc -l < data/output/invalid_ips.log) lines"
+          fi
+
+      - name: Generate statistics and README
+        run: |
+          echo "=== Generating Statistics ==="
+          
+          # Create statistics file
+          cat > data/output/stats.md << EOF
+          # IP Aggregation Statistics
+          
+          **Last Updated:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+          
+          ## Summary
+          EOF
+          
+          if [ -f "data/output/aggregated.txt" ]; then
+            TOTAL_IPS=$(wc -l < data/output/aggregated.txt)
+            echo "- **Total Aggregated IPs:** $TOTAL_IPS" >> data/output/stats.md
+          fi
+          
+          if [ -f "data/output/aggregated-us-only.txt" ]; then
+            US_IPS=$(wc -l < data/output/aggregated-us-only.txt)
+            echo "- **US-Only IPs:** $US_IPS" >> data/output/stats.md
+            if [ -f "data/output/aggregated.txt" ]; then
+              TOTAL_IPS=$(wc -l < data/output/aggregated.txt)
+              PERCENTAGE=$(echo "scale=2; $US_IPS * 100 / $TOTAL_IPS" | bc -l)
+              echo "- **US Percentage:** ${PERCENTAGE}%" >> data/output/stats.md
+            fi
+          fi
+          
+          if [ -f "data/output/invalid_ips.log" ]; then
+            INVALID_IPS=$(wc -l < data/output/invalid_ips.log)
+            echo "- **Invalid Entries:** $INVALID_IPS" >> data/output/stats.md
+          fi
+          
+          echo "" >> data/output/stats.md
+          echo "## Sources" >> data/output/stats.md
+          grep "^URL_" .env | sed 's/URL_[0-9]*=/- /' >> data/output/stats.md
+          
+          echo "" >> data/output/stats.md
+          echo "## Configuration" >> data/output/stats.md
+          echo "- **Country Filter:** $(grep COUNTRY_NAME .env | cut -d= -f2)" >> data/output/stats.md
+          echo "- **Country Code:** $(grep COUNTRY_ISO_CODE .env | cut -d= -f2)" >> data/output/stats.md
+          
+          # Display the statistics
+          cat data/output/stats.md
+
+      - name: Update main README
+        run: |
+          echo "=== Updating Main README ==="
+          
+          cat > README.md << 'EOF'
+          # IP Aggregation & Filtering
+          
+          ![Workflow Status](https://github.com/${{ github.repository }}/actions/workflows/ip-aggregation.yml/badge.svg)
+          ![Docker](https://badgen.net/badge/icon/docker?icon=docker&label)
+          ![License](https://badgen.net/badge/license/MIT/blue)
+          
+          **Automated IP blocklist aggregation and geographical filtering**
+          
+          ---
+          
+          ## 🚀 Features
+          
+          - **Automated Aggregation**: Combines multiple IP blocklists into a single deduplicated list
+          - **Geographical Filtering**: Filters IPs by country (default: US-only)
+          - **Docker Support**: Runs in containerized environment for consistency
+          - **GitHub Actions**: Automated daily updates with manual trigger support
+          - **Multi-source**: Supports multiple URL sources via environment configuration
+          
+          ## 📊 Latest Statistics
+          
+          EOF
+          
+          # Append current statistics
+          if [ -f "data/output/stats.md" ]; then
+            tail -n +3 data/output/stats.md >> README.md
+          fi
+          
+          cat >> README.md << 'EOF'
+          
+          ---
+          
+          ## 🛠 Usage
+          
+          ### GitHub Actions (Automated)
+          
+          1. **Enable Actions**: Go to `Settings > Actions > General > Workflow permissions`
+          2. **Set Permissions**: Select "Read and write permissions"
+          3. **Configure Environment**: Edit `.env` file with your desired sources and settings
+          4. **Automatic Runs**: The workflow runs daily at 02:17 UTC
+          5. **Manual Trigger**: Use the "Actions" tab to run manually when needed
+          
+          ### Local Development
+          
+          ```bash
+          # Clone the repository
+          git clone https://github.com/${{ github.repository }}.git
+          cd ip-aggregator
+          
+          # Configure your sources in .env
+          cp .env.example .env
+          vim .env
+          
+          # Run with Docker Compose
+          docker compose up --build
+          
+          # Check results
+          ls -la data/output/
+          ```
+          
+          ### Configuration
+          
+          Edit `.env` to customize:
+          
+          ```bash
+          # Add your IP list sources
+          URL_1=https://example.com/blocklist1.txt
+          URL_2=https://example.com/blocklist2.txt
+          
+          # Set country filtering
+          COUNTRY_ISO_CODE=US
+          COUNTRY_NAME=United States
+          
+          # Configure paths (usually don't need to change)
+          GEOIP_CSV_PATH=/data/geoip/geoip2-ipv4.csv
+          OUTPUT_PATH=/data/output/aggregated-us-only.txt
+          INPUT_PATH=/data/output/aggregated.txt
+          ```
+          
+          ## 📁 Output Files
+          
+          - `data/output/aggregated.txt` - All deduplicated IPs from all sources
+          - `data/output/aggregated-us-only.txt` - US-filtered IPs only
+          - `data/output/stats.md` - Processing statistics and metadata
+          - `data/output/invalid_ips.log` - Log of invalid entries encountered
+          
+          ## 🔄 Workflow Triggers
+          
+          The GitHub Action runs automatically when:
+          
+          - **Daily Schedule**: Every day at 02:17 UTC
+          - **File Changes**: When `.env`, `Dockerfile`, or key scripts are modified
+          - **Manual Trigger**: Via GitHub Actions interface
+          
+          ## ⚡ Performance
+          
+          - **Processing Speed**: ~450 IPs per second for filtering
+          - **Parallel Processing**: Multi-core optimization for large datasets
+          - **Memory Efficient**: Streaming processing for large files
+          - **Optimized Lookup**: Integer-based IP range matching
+          
+          ## 🤝 Contributing
+          
+          1. Fork the repository
+          2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+          3. Commit your changes (`git commit -m 'Add amazing feature'`)
+          4. Push to the branch (`git push origin feature/amazing-feature`)
+          5. Open a Pull Request
+          
+          ---
+          
+          **Last updated automatically:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+          EOF
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: "ip-aggregation-results-${{ github.run_number }}"
+          path: |
+            data/output/aggregated.txt
+            data/output/aggregated-us-only.txt
+            data/output/stats.md
+            data/output/invalid_ips.log
+          retention-days: 30
+
+      - name: Commit and push results
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        run: |
+          echo "=== Committing Results ==="
+          
+          # Configure git
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Add all output files and README
+          git add data/output/ README.md
+          
+          # Check if there are changes to commit
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            # Create commit with timestamp and stats
+            COMMIT_MSG="🤖 Auto-update IP lists - $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+            
+            if [ -f "data/output/aggregated.txt" ] && [ -f "data/output/aggregated-us-only.txt" ]; then
+              TOTAL=$(wc -l < data/output/aggregated.txt)
+              US_ONLY=$(wc -l < data/output/aggregated-us-only.txt)
+              COMMIT_MSG="$COMMIT_MSG - Total: $TOTAL, US: $US_ONLY"
+            fi
+            
+            git commit -m "$COMMIT_MSG"
+            git push
+            
+            echo "✅ Results committed and pushed successfully"
+          fi
+
+      - name: Cleanup
+        if: always()
+        run: |
+          echo "=== Cleanup ==="
+          docker compose down --volumes --remove-orphans || true
+          docker system prune -f || true
+          
+          echo "=== Final Repository State ==="
+          ls -la data/output/ || true
