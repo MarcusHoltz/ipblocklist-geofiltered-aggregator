@@ -1,21 +1,26 @@
-# Install dependencies
-
+# Use a slim Python image as the base for the container
 FROM python:3.12-slim
 
-RUN apt-get update && apt-get install -y bash curl wget
-#RUN pip install requests
-RUN pip install pandas requests ipaddress
+# Install necessary packages for bash, curl, and wget
+RUN apt-get update && apt-get install -y bash curl wget && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Install required Python libraries for the application
+RUN pip install --no-cache-dir pandas requests ipaddress python-dotenv
+
+# Set the working directory in the container
 WORKDIR /app
 
-COPY __main__.py /app/
-COPY run.sh /app/
-COPY filter_us_ips.py /app/
+# Download the Python script that will serve as the main application entry point
+RUN wget -O __main__.py https://raw.githubusercontent.com/andrewtwin/ip-aggregator/refs/heads/main/__main__.py
 
-# Install Python deps
-#RUN pip install pandas
+# Copy necessary files to the container
+#COPY run.sh /app/
+#COPY filter_us_ips.py /app/
+COPY . /app
 
-# Download GeoIP2 CSV
-RUN wget -O geoip2-ipv4.csv https://datahub.io/core/geoip2-ipv4/r/geoip2-ipv4.csv
+# Create necessary directories
+RUN mkdir -p /data/geoip /data/output
 
+# Specify the entrypoint to run the application
 ENTRYPOINT [ "bash", "/app/run.sh" ]
