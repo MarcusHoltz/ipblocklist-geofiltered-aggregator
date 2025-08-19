@@ -11,13 +11,12 @@ done < .env
 
 # Where to save raw files
 INPUT_DIR="/data/input"
-TMP_INPUT="/tmp/all_input.txt"
+COMBINED_INPUT="/tmp/all_input.txt"
 OUTPUT_DIR="/data/output"
 
 # Create the input and output directories if they don't exist
 mkdir -p "$INPUT_DIR"
 mkdir -p "$OUTPUT_DIR"
-> "$TMP_INPUT"
 
 # Load LIST variables dynamically into an array
 LISTS=()
@@ -31,75 +30,78 @@ if [ ${#LISTS[@]} -eq 0 ]; then
   exit 1
 fi
 
-# Correct URLs, with the fixed URL for emerging threats
+# Download files
 echo "[INFO] Downloading ${#LISTS[@]} files..."
 for url in "${LISTS[@]}"; do
   fname="$(basename "$url")"  # Extract the file name from the URL
   echo "[INFO] → $url → $INPUT_DIR/$fname"
   
   # Download and save file
-  wget -q -O "$INPUT_DIR/$fname" "$url"
-  
-  # Check if wget command succeeds
-  if [ $? -ne 0 ]; then
-    echo "[ERROR] Failed to download file from $url"
-    continue  # Proceed with the next URL if this one fails
+  if ! wget -q -O "$INPUT_DIR/$fname" "$url"; then
+    echo "[WARNING] Failed to download file from $url, skipping..."
+    continue
   fi
 done
 
-# Validate and filter IPs, skip comments or invalid entries (including non-IP data like domain lists and special characters)
-echo "[INFO] Validating and filtering IP addresses..."
-> "$TMP_INPUT"  # Ensure the temporary file is cleared before adding valid lines
-for file in "$INPUT_DIR"/*; do  # Process all files, regardless of extension
-  # Get file size and calculate estimated processing time
-  file_size=$(stat -c%s "$file" 2>/dev/null || echo "0")
-  if [ "$file_size" -gt 0 ]; then
-    # Calculate estimated time at 7kb per second
-    estimated_seconds=$((file_size / 7000))
-    if [ $estimated_seconds -lt 60 ]; then
-      time_display="${estimated_seconds}s"
-    elif [ $estimated_seconds -lt 3600 ]; then
-      minutes=$((estimated_seconds / 60))
-      seconds=$((estimated_seconds % 60))
-      time_display="${minutes}m ${seconds}s"
-    else
-      hours=$((estimated_seconds / 3600))
-      minutes=$(((estimated_seconds % 3600) / 60))
-      time_display="${hours}h ${minutes}m"
-    fi
-    echo "[INFO] File size: $(numfmt --to=iec-i --suffix=B $file_size), estimated processing time: $time_display"
-  fi
-  echo "[INFO] Processing file: $file"
-  cat "$file" | \
-  grep -Ev '^(#.*|^$|[a-zA-Z]+\.[a-zA-Z]+|^/.*|^!.*|^-.*)' | \
-  while read -r line; do
-    # Relaxed IP validation
-    if echo "$line" | grep -Pq '^(?:\d{1,3}\.){3}\d{1,3}(/(?:[1-9]|1[0-2])?\d{1,2})?$'; then
-      echo "$line" >> $TMP_INPUT
-    else
-      echo "[WARNING] Invalid line: $line" >> /data/output/invalid_ips.log
-    fi
-  done
-done
-
-# Check if any IPs were successfully written to TMP_INPUT
-if [[ ! -s "$TMP_INPUT" ]]; then
-  echo "[ERROR] No valid IP addresses found! Please check the input data."
+# Check if any files were downloaded
+if [ ! "$(ls -A $INPUT_DIR 2>/dev/null)" ]; then
+  echo "[ERROR] No files were successfully downloaded!"
   exit 1
 fi
 
-# Concatenate all valid entries into the temporary file
-echo "[INFO] Aggregating..."
-# Run the aggregation script with full stdout
-# python /app/__main__.py -s "${FLAGS[@]}" < "$TMP_INPUT" > /data/output/aggregated.txt
-# Run with cleaner output
-python /app/__main__.py -s "${FLAGS[@]}" < "$TMP_INPUT" > /data/output/aggregated.txt 2>/dev/null
+# Combine all downloaded files into one input file
+echo "[INFO] Combining all downloaded files..."
+> "$COMBINED_INPUT"  # Create/clear the combined input file
 
-# Clean up downloaded input files (optional)
-echo "[INFO] Cleaning up input directory..."
- rm -rf /data/input/
+for file in "$INPUT_DIR"/*; do
+  if [ -f "$file" ]; then
+    echo "[INFO] Adding $(basename "$file")..."
+    # Add file content and ensure it ends with a newline
+    cat "$file" >> "$COMBINED_INPUT"
+    echo "" >> "$COMBINED_INPUT"
+  fi
+done
 
-# NEW STEP: Filter to COUNTRY_ISO_CODE-only IPs
-echo "[INFO] Filtering ${COUNTRY_ISO_CODE}-only IPs..."  # Dynamic log message based on COUNTRY_ISO_CODE
-# Run the script to filter out only US-based IPs
-python /app/filter_ips.py
+# Check if combined file has content
+if [[ ! -s "$COMBINED_INPUT" ]]; then
+  echo "[ERROR] Combined input file is empty!"
+  exit 1
+fi
+
+echo "[INFO] Combined $(wc -l < "$COMBINED_INPUT") lines from all sources"
+
+# Run the aggregation script with stdin input
+echo "[INFO] Running IP aggregation..."
+if ! python /app/__main__.py -s < "$COMBINED_INPUT" > "$OUTPUT_DIR/aggregated.txt" 2>/dev/null; then
+  echo "[ERROR] IP aggregation failed!"
+  exit 1
+fi
+
+echo "[INFO] Aggregation complete: $(wc -l < "$OUTPUT_DIR/aggregated.txt") unique networks/IPs"
+
+# Filter to country-specific IPs if COUNTRY_ISO_CODE is set
+if [ -n "$COUNTRY_ISO_CODE" ]; then
+  echo "[INFO] Filtering ${COUNTRY_ISO_CODE}-only IPs..."
+  if ! python /app/filter_ips.py; then
+    echo "[WARNING] Country filtering failed, but continuing..."
+  fi
+fi
+
+# Clean up downloaded input files and temporary files
+echo "[INFO] Cleaning up temporary files..."
+rm -rf "$INPUT_DIR"
+rm -f "$COMBINED_INPUT"
+
+echo "[INFO] Processing complete!"
+echo "[INFO] Results saved to $OUTPUT_DIR/"
+
+# Show final results
+if [ -f "$OUTPUT_DIR/aggregated.txt" ]; then
+  echo "[INFO] Aggregated IPs: $(wc -l < "$OUTPUT_DIR/aggregated.txt")"
+fi
+
+# Show country-specific results if they exist
+COUNTRY_FILE="$OUTPUT_DIR/aggregated-$(echo ${COUNTRY_ISO_CODE:-xx} | tr '[:upper:]' '[:lower:]')-only.txt"
+if [ -f "$COUNTRY_FILE" ]; then
+  echo "[INFO] Country-filtered IPs: $(wc -l < "$COUNTRY_FILE")"
+fi
