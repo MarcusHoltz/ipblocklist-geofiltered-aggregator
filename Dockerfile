@@ -1,12 +1,11 @@
 # Use a slim Python image as the base for the container
-FROM python:3.12-slim
-
+FROM python:bookworm
 # Install necessary packages for bash, curl, and wget
 RUN apt-get update && apt-get install -y bash curl wget && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install required Python libraries for the application
-RUN pip install --no-cache-dir pandas requests ipaddress python-dotenv
+RUN pip install --no-cache-dir pandas requests ipaddress python-dotenv pysubnettree
 
 # Set the working directory in the container
 WORKDIR /app
@@ -15,8 +14,6 @@ WORKDIR /app
 RUN wget -O __main__.py https://raw.githubusercontent.com/andrewtwin/ip-aggregator/refs/heads/main/__main__.py
 
 # Copy necessary files to the container
-#COPY run.sh /app/
-#COPY filter_us_ips.py /app/
 COPY . /app
 
 # Create necessary directories
