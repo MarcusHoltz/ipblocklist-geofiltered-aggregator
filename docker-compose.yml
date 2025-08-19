@@ -1,14 +1,14 @@
 ---
 services:
-  ipaggregator:
+  ipblock10101:
     build: .
     volumes:
-      - ./input:/data/input
-      - ./output:/data/output
-      - ./geoip:/data/geoip
-    entrypoint: [ "bash", "/app/run.sh" ]
-    command: >
-      https://raw.githubusercontent.com/FabrizioCafolla/openai-crawlers-ip-ranges/refs/heads/main/openai/openai-ip-ranges-all.txt
-      https://raw.githubusercontent.com/bongochong/CombinedPrivacyBlockLists/refs/heads/master/cpbl-abp-list.txt
-      https://rules.emergingthreats.net/fwrules/emerging-Block-IPs.txt
-      -S
+      - ./data:/data
+      - ./.env:/app/.env  # Mount the .env file inside the container
+    env_file:
+      - .env  # Add this to load the .env file
+    environment:
+      - ALL_IPS_FROM_LISTS=/data/output/aggregated.txt
+      - COUNTRY_ONLY_IPS=/data/output/aggregated-us-only.txt
+      - GEOIP_CSV_PATH=/data/geoip/geoip2-ipv4.csv
+    command: /app/run.sh
