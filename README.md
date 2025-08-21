@@ -27,7 +27,7 @@ Automated IP blocklist aggregation with multi-country geographical filtering
 
 ## 📊 Latest Statistics
 
-**Last Updated:** 2025-08-21 04:36:09 UTC
+**Last Updated:** 2025-08-21 04:42:16 UTC
 
 ## 📈 Country Distribution
 
@@ -251,7 +251,7 @@ The GitHub Action runs automatically when:
 - **Manual Trigger**: Via GitHub Actions interface
 
 
-### 🧹 Starting With Clean Output
+## 🧹 Starting With Clean Output
 
 If you're going to customize the list: 
 
