@@ -448,6 +448,19 @@ jobs:
           - **Daily Schedule**: Every day at 02:17 UTC
           - **File Changes**: When `.env`, `Dockerfile`, or key scripts are modified
           - **Manual Trigger**: Via GitHub Actions interface
+
+          
+          ### 🧹 Starting With Clean Output
+          
+          If you're going to customize the list: 
+          
+          - You should remove the [./data/output](https://github.com/${{ github.repository }}/edit/main/data/output) folder, as it will only contain data pertinant to the last run.
+          
+          - Always remove the [./data/output](https://github.com/${{ github.repository }}/edit/main/data/output) folder when you customize the countries. 
+          
+          > This will ensure you dont include older, unused countries in your new aggreagtion lists.
+
+
           
           ## ⚡ Performance
           
