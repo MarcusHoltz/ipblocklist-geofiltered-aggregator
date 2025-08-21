@@ -2,7 +2,7 @@
 
 ![Workflow Status](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/actions/workflows/ip-aggregation.yml/badge.svg)
 ![Countries](https://img.shields.io/badge/Countries-6-278EF5)
-![Total IPs Blocked](https://img.shields.io/badge/Blocked_IPs-606273-2D56A8)
+![Total IPs Blocked](https://img.shields.io/badge/Blocked_IPs-606654-2D56A8)
           
 ![Issues](https://img.shields.io/github/issues/MarcusHoltz/ipblocklist-geofiltered-aggregator)
 ![Last Commit](https://img.shields.io/github/last-commit/MarcusHoltz/ipblocklist-geofiltered-aggregator)
@@ -27,7 +27,7 @@ Automated IP blocklist aggregation with multi-country geographical filtering
 
 ## 📊 Latest Statistics
 
-**Last Updated:** 2025-08-21 14:40:13 UTC
+**Last Updated:** 2025-08-21 17:15:12 UTC
 
 ## 📈 Country Distribution
 
@@ -44,22 +44,22 @@ pie showData title IP Blocklist Distribution by Country
 
 ## Overall Summary
 
-- **Total Input IPs:** 606,273
+- **Total Input IPs:** 606,654
 - **Countries Processed:** 6
-- **Combined Unique IPs:** 131,545
+- **Combined Unique IPs:** 131,733
 - **Combined Output File:** `aggregated-multi-6countries-combined.txt`
-- **Overall Filter Rate:** 21.70%
+- **Overall Filter Rate:** 21.71%
 
 ## Per-Country Results
 
 | Country | Code | Networks Found | Networks Optimized | IPs Matched | Filter Rate | Output File |
 |---------|------|----------------|--------------------|-----------|-----------|-----------|
-| United States | US | 217,567 | 216,153 | 74,018 | 12.21% | `aggregated-us-only.txt` |
-| Canada | CA | 17,627 | 17,504 | 10,654 | 1.76% | `aggregated-ca-only.txt` |
-| United Kingdom | GB | 32,830 | 32,667 | 9,881 | 1.63% | `aggregated-gb-only.txt` |
-| Australia | AU | 11,306 | 11,248 | 4,674 | 0.77% | `aggregated-au-only.txt` |
-| Germany | DE | 27,147 | 27,041 | 19,073 | 3.15% | `aggregated-de-only.txt` |
-| South Korea | KR | 3,944 | 3,931 | 13,245 | 2.18% | `aggregated-kr-only.txt` |
+| United States | US | 217,567 | 216,153 | 74,120 | 12.22% | `aggregated-us-only.txt` |
+| Canada | CA | 17,627 | 17,504 | 10,675 | 1.76% | `aggregated-ca-only.txt` |
+| United Kingdom | GB | 32,830 | 32,667 | 9,903 | 1.63% | `aggregated-gb-only.txt` |
+| Australia | AU | 11,306 | 11,248 | 4,678 | 0.77% | `aggregated-au-only.txt` |
+| Germany | DE | 27,147 | 27,041 | 19,109 | 3.15% | `aggregated-de-only.txt` |
+| South Korea | KR | 3,944 | 3,931 | 13,248 | 2.18% | `aggregated-kr-only.txt` |
 
 ## IP Sources
 
@@ -83,14 +83,14 @@ pie showData title IP Blocklist Distribution by Country
 
 ### 📁 Generated Files
 
-- **`aggregated.txt`** - 606,273 total aggregated IPs from all sources
-- **`aggregated-au-only.txt`** - 4,674 IPs from AU
-- **`aggregated-ca-only.txt`** - 10,654 IPs from CA
-- **`aggregated-de-only.txt`** - 19,073 IPs from DE
-- **`aggregated-gb-only.txt`** - 9,881 IPs from GB
-- **`aggregated-kr-only.txt`** - 13,245 IPs from KR
-- **`aggregated-us-only.txt`** - 74,018 IPs from US
-- **`aggregated-multi-6countries-combined.txt`** - 131,545 unique IPs (deduplicated across all countries)
+- **`aggregated.txt`** - 606,654 total aggregated IPs from all sources
+- **`aggregated-au-only.txt`** - 4,678 IPs from AU
+- **`aggregated-ca-only.txt`** - 10,675 IPs from CA
+- **`aggregated-de-only.txt`** - 19,109 IPs from DE
+- **`aggregated-gb-only.txt`** - 9,903 IPs from GB
+- **`aggregated-kr-only.txt`** - 13,248 IPs from KR
+- **`aggregated-us-only.txt`** - 74,120 IPs from US
+- **`aggregated-multi-6countries-combined.txt`** - 131,733 unique IPs (deduplicated across all countries)
 
 ---
 
@@ -130,7 +130,7 @@ Set up your own copy of this repository to aggregate and filter your IP blocklis
 4. **Your Favorite Blocklists**: Load as many blocklists as you like, just make sure the line starts with `LIST1_`, `LIST2_`, `LIST3_`, etc.
 5. **Multiple Countries**: Countries can be modified the same way, `COUNTRY_ISO_CODE_1`, `COUNTRY_NAME_1`, `COUNTRY_ISO_CODE_2`, `COUNTRY_NAME_2`, etc.
 6. **Find Country Codes**: You can find your country codes in the [geoip2-ipv4 spreadsheet](https://datahub.io/core/geoip2-ipv4)
-7. **Automatic Runs**: The workflow runs daily at **02:17 UTC** or anytime if you [modified the cron file](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/edit/main/.github/workflows/ip-aggregation.yml)
+7. **Automatic Runs**: The workflow runs twice daily. At both **02:17 AM/PM UTC** or it will run anytime if you [modified the cron file](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/edit/main/.github/workflows/ip-aggregation.yml)
 
 
 #### Third Step - Running This Action
@@ -246,7 +246,7 @@ ls -la data/output/
 
 The GitHub Action runs automatically when:
 
-- **Daily Schedule**: Every day at 02:17 UTC
+- **Daily Schedule**: Every day, twice. Once at at 02:17 AM UTC and then again at 02:17 PM UTC
 - **File Changes**: When `.env`, `Dockerfile`, or key scripts are modified
 - **Manual Trigger**: Via GitHub Actions interface
 
@@ -255,7 +255,7 @@ The GitHub Action runs automatically when:
 
 If you're going to customize the list: 
 
-- You should remove the [./data/output](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/edit/main/data/output) folder, as it will only contain data pertinant to the last run.
+- You should remove the [./data/output](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/edit/main/data/output) folder, as it will only contain data pertinent to the last run.
 
 - Always remove the [./data/output](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/edit/main/data/output) folder when you customize the countries. 
 
