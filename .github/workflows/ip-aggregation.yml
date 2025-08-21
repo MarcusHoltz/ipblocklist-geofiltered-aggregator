@@ -329,7 +329,7 @@ jobs:
           4. **Your Favorite Blocklists**: Load as many blocklists as you like, just make sure the line starts with `LIST1_`, `LIST2_`, `LIST3_`, etc.
           5. **Multiple Countries**: Countries can be modified the same way, `COUNTRY_ISO_CODE_1`, `COUNTRY_NAME_1`, `COUNTRY_ISO_CODE_2`, `COUNTRY_NAME_2`, etc.
           6. **Find Country Codes**: You can find your country codes in the [geoip2-ipv4 spreadsheet](https://datahub.io/core/geoip2-ipv4)
-          7. **Automatic Runs**: The workflow runs daily at **02:17 UTC** or anytime if you [modified the cron file](https://github.com/${{ github.repository }}/edit/main/.github/workflows/ip-aggregation.yml)
+          7. **Automatic Runs**: The workflow runs twice daily. At both **02:17 AM/PM UTC** or it will run anytime if you [modified the cron file](https://github.com/${{ github.repository }}/edit/main/.github/workflows/ip-aggregation.yml)
 
 
           #### Third Step - Running This Action
@@ -445,7 +445,7 @@ jobs:
           
           The GitHub Action runs automatically when:
           
-          - **Daily Schedule**: Every day at 02:17 UTC
+          - **Daily Schedule**: Every day, twice. Once at at 02:17 AM UTC and then again at 02:17 PM UTC
           - **File Changes**: When `.env`, `Dockerfile`, or key scripts are modified
           - **Manual Trigger**: Via GitHub Actions interface
 
