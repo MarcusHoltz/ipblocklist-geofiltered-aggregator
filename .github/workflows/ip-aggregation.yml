@@ -454,7 +454,7 @@ jobs:
           
           If you're going to customize the list: 
           
-          - You should remove the [./data/output](https://github.com/${{ github.repository }}/edit/main/data/output) folder, as it will only contain data pertinant to the last run.
+          - You should remove the [./data/output](https://github.com/${{ github.repository }}/edit/main/data/output) folder, as it will only contain data pertinent to the last run.
           
           - Always remove the [./data/output](https://github.com/${{ github.repository }}/edit/main/data/output) folder when you customize the countries. 
           
