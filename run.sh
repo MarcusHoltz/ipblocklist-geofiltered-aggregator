@@ -24,7 +24,7 @@ rm -rf "$OUTPUT_DIR"/*
 
 # Load LIST_anything_ending_in_a_# variables dynamically into an array
 LISTS=()
-for var in $(env | '^LIST_.*[0-9]+' | cut -d= -f1); do
+for var in $(env | grep '^LIST_.*[0-9]+' | cut -d= -f1); do
   LISTS+=("${!var}")  # Append value of each LIST_ variable to the LISTS array
 done
 
