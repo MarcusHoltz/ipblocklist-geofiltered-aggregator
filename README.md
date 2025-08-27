@@ -27,7 +27,7 @@ Automated IP blocklist aggregation with multi-country geographical filtering
 
 ## 📊 Latest Statistics
 
-**Last Updated:** 2025-08-27 15:27:00 UTC
+**Last Updated:** 2025-08-27 15:31:26 UTC
 
 ## 📈 Country Distribution
 
