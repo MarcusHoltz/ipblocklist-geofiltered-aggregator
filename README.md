@@ -2,7 +2,7 @@
 
 ![Workflow Status](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/actions/workflows/ip-aggregation.yml/badge.svg)
 ![Countries](https://img.shields.io/badge/Countries-6-278EF5)
-![Total IPs Blocked](https://img.shields.io/badge/Blocked_IPs-602515-2D56A8)
+![Total IPs Blocked](https://img.shields.io/badge/Blocked_IPs-602518-2D56A8)
           
 ![Issues](https://img.shields.io/github/issues/MarcusHoltz/ipblocklist-geofiltered-aggregator)
 ![Last Commit](https://img.shields.io/github/last-commit/MarcusHoltz/ipblocklist-geofiltered-aggregator)
@@ -27,7 +27,7 @@ Automated IP blocklist aggregation with multi-country geographical filtering
 
 ## 📊 Latest Statistics
 
-**Last Updated:** 2025-08-27 20:23:36 UTC
+**Last Updated:** 2025-08-27 20:43:48 UTC
 
 ## 📈 Country Distribution
 
@@ -44,7 +44,7 @@ pie showData title IP Blocklist Distribution by Country
 
 ## Overall Summary
 
-- **Total Input IPs:** 602,515
+- **Total Input IPs:** 602,518
 - **Countries Processed:** 6
 - **Combined Unique IPs:** 132,687
 - **Combined Output File:** `aggregated-multi-6countries-combined.txt`
@@ -83,7 +83,7 @@ pie showData title IP Blocklist Distribution by Country
 
 ### 📁 Generated Files
 
-- **`aggregated.txt`** - 602,515 total aggregated IPs from all sources
+- **`aggregated.txt`** - 602,518 total aggregated IPs from all sources
 - **`aggregated-au-only.txt`** - 4,583 IPs from AU
 - **`aggregated-ca-only.txt`** - 10,841 IPs from CA
 - **`aggregated-de-only.txt`** - 19,595 IPs from DE
