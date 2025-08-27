@@ -1,6 +1,6 @@
 # Multi-Country IP Aggregation Statistics
 
-**Last Updated:** 2025-08-27 20:23:36 UTC
+**Last Updated:** 2025-08-27 20:43:48 UTC
 
 ## 📈 Country Distribution
 
@@ -17,7 +17,7 @@ pie showData title IP Blocklist Distribution by Country
 
 ## Overall Summary
 
-- **Total Input IPs:** 602,515
+- **Total Input IPs:** 602,518
 - **Countries Processed:** 6
 - **Combined Unique IPs:** 132,687
 - **Combined Output File:** `aggregated-multi-6countries-combined.txt`
