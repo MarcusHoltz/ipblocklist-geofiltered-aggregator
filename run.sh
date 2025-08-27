@@ -22,18 +22,11 @@ mkdir -p "$OUTPUT_DIR"
 echo "[INFO] Clearing output directory $OUTPUT_DIR before generating new files..."
 rm -rf "$OUTPUT_DIR"/*
 
-# Debug: Show all environment variables starting with LIST_
-echo "[DEBUG] All LIST_ environment variables found:"
-env | grep '^LIST_' || echo "[DEBUG] No LIST_ variables found in environment"
-
-# Load LIST variables dynamically into an array
+# Load LIST variables dynamically into an array (supports LIST_#, LIST_VPS#, LIST_DATA#, etc.)
 LISTS=()
 for var in $(env | grep '^LIST_' | cut -d= -f1); do
-  echo "[DEBUG] Found LIST variable: $var = ${!var}"
   LISTS+=("${!var}")  # Append value of each LIST_ variable to the LISTS array
 done
-
-echo "[DEBUG] Total LIST variables loaded: ${#LISTS[@]}"
 
 # Ensure the LISTS array is populated
 if [ ${#LISTS[@]} -eq 0 ]; then
