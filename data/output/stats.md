@@ -1,38 +1,38 @@
 # Multi-Country IP Aggregation Statistics
 
-**Last Updated:** 2025-09-27 14:31:49 UTC
+**Last Updated:** 2025-09-28 03:16:45 UTC
 
 ## 📈 Country Distribution
 
 ```mermaid
 pie showData title IP Blocklist Distribution by Country
 "United States" : 13.1
-"Germany" : 3.4
+"Germany" : 3.2
 "South Korea" : 2.4
 "Canada" : 2.0
 "United Kingdom" : 1.7
 "Australia" : 0.8
-"Other/Unfiltered" : 76.6
+"Other/Unfiltered" : 76.8
 ```
 
 ## Overall Summary
 
-- **Total Input IPs:** 566,562
+- **Total Input IPs:** 562,388
 - **Countries Processed:** 6
-- **Combined Unique IPs:** 132,581
+- **Combined Unique IPs:** 130,461
 - **Combined Output File:** `aggregated-multi-6countries-combined.txt`
-- **Overall Filter Rate:** 23.40%
+- **Overall Filter Rate:** 23.20%
 
 ## Per-Country Results
 
 | Country | Code | Networks Found | Networks Optimized | IPs Matched | Filter Rate | Output File |
 |---------|------|----------------|--------------------|-----------|-----------|-----------|
-| United States | US | 224,791 | 222,401 | 74,241 | 13.10% | `aggregated-us-only.txt` |
-| Canada | CA | 17,886 | 17,771 | 11,373 | 2.01% | `aggregated-ca-only.txt` |
-| United Kingdom | GB | 32,808 | 32,653 | 9,520 | 1.68% | `aggregated-gb-only.txt` |
-| Australia | AU | 11,669 | 11,610 | 4,801 | 0.85% | `aggregated-au-only.txt` |
-| Germany | DE | 27,582 | 27,471 | 19,327 | 3.41% | `aggregated-de-only.txt` |
-| South Korea | KR | 4,009 | 4,008 | 13,319 | 2.35% | `aggregated-kr-only.txt` |
+| United States | US | 225,472 | 222,928 | 73,700 | 13.10% | `aggregated-us-only.txt` |
+| Canada | CA | 17,937 | 17,822 | 11,263 | 2.00% | `aggregated-ca-only.txt` |
+| United Kingdom | GB | 32,943 | 32,788 | 9,406 | 1.67% | `aggregated-gb-only.txt` |
+| Australia | AU | 11,681 | 11,621 | 4,768 | 0.85% | `aggregated-au-only.txt` |
+| Germany | DE | 27,612 | 27,495 | 18,058 | 3.21% | `aggregated-de-only.txt` |
+| South Korea | KR | 4,005 | 4,004 | 13,266 | 2.36% | `aggregated-kr-only.txt` |
 
 ## IP Sources
 
