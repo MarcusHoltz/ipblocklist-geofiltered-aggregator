@@ -1,6 +1,6 @@
 # Multi-Country IP Aggregation Statistics
 
-**Last Updated:** 2025-10-09 14:43:17 UTC
+**Last Updated:** 2025-10-10 03:11:53 UTC
 
 ## 📈 Country Distribution
 
@@ -17,22 +17,22 @@ pie showData title IP Blocklist Distribution by Country
 
 ## Overall Summary
 
-- **Total Input IPs:** 526,956
+- **Total Input IPs:** 523,473
 - **Countries Processed:** 6
-- **Combined Unique IPs:** 124,691
+- **Combined Unique IPs:** 123,883
 - **Combined Output File:** `aggregated-multi-6countries-combined.txt`
-- **Overall Filter Rate:** 23.66%
+- **Overall Filter Rate:** 23.67%
 
 ## Per-Country Results
 
 | Country | Code | Networks Found | Networks Optimized | IPs Matched | Filter Rate | Output File |
 |---------|------|----------------|--------------------|-----------|-----------|-----------|
-| United States | US | 226,331 | 223,775 | 70,382 | 13.36% | `aggregated-us-only.txt` |
-| Canada | CA | 17,971 | 17,851 | 10,655 | 2.02% | `aggregated-ca-only.txt` |
-| United Kingdom | GB | 33,071 | 32,917 | 9,519 | 1.81% | `aggregated-gb-only.txt` |
-| Australia | AU | 11,560 | 11,500 | 4,292 | 0.81% | `aggregated-au-only.txt` |
-| Germany | DE | 27,643 | 27,520 | 17,077 | 3.24% | `aggregated-de-only.txt` |
-| South Korea | KR | 4,001 | 4,000 | 12,766 | 2.42% | `aggregated-kr-only.txt` |
+| United States | US | 226,331 | 223,775 | 69,885 | 13.35% | `aggregated-us-only.txt` |
+| Canada | CA | 17,971 | 17,851 | 10,564 | 2.02% | `aggregated-ca-only.txt` |
+| United Kingdom | GB | 33,071 | 32,917 | 9,468 | 1.81% | `aggregated-gb-only.txt` |
+| Australia | AU | 11,560 | 11,500 | 4,276 | 0.82% | `aggregated-au-only.txt` |
+| Germany | DE | 27,643 | 27,520 | 16,974 | 3.24% | `aggregated-de-only.txt` |
+| South Korea | KR | 4,001 | 4,000 | 12,716 | 2.43% | `aggregated-kr-only.txt` |
 
 ## IP Sources
 
