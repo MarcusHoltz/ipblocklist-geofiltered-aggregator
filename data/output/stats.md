@@ -1,38 +1,38 @@
 # Multi-Country IP Aggregation Statistics
 
-**Last Updated:** 2025-12-07 03:44:34 UTC
+**Last Updated:** 2025-12-07 14:34:42 UTC
 
 ## 📈 Country Distribution
 
 ```mermaid
 pie showData title IP Blocklist Distribution by Country
-"United States" : 18.0
-"Germany" : 3.8
+"United States" : 17.9
+"Germany" : 3.7
 "South Korea" : 2.8
 "United Kingdom" : 2.3
 "Canada" : 2.1
-"Australia" : 1.4
-"Other/Unfiltered" : 69.7
+"Australia" : 1.3
+"Other/Unfiltered" : 69.9
 ```
 
 ## Overall Summary
 
-- **Total Input IPs:** 400,730
+- **Total Input IPs:** 406,505
 - **Countries Processed:** 6
-- **Combined Unique IPs:** 121,547
+- **Combined Unique IPs:** 122,508
 - **Combined Output File:** `aggregated-multi-6countries-combined.txt`
-- **Overall Filter Rate:** 30.33%
+- **Overall Filter Rate:** 30.14%
 
 ## Per-Country Results
 
 | Country | Code | Networks Found | Networks Optimized | IPs Matched | Filter Rate | Output File |
 |---------|------|----------------|--------------------|-----------|-----------|-----------|
-| United States | US | 208,444 | 206,866 | 72,273 | 18.04% | `aggregated-us-only.txt` |
-| Canada | CA | 17,376 | 17,261 | 8,504 | 2.12% | `aggregated-ca-only.txt` |
-| United Kingdom | GB | 33,249 | 33,123 | 9,109 | 2.27% | `aggregated-gb-only.txt` |
-| Australia | AU | 11,332 | 11,274 | 5,453 | 1.36% | `aggregated-au-only.txt` |
-| Germany | DE | 27,316 | 27,187 | 15,034 | 3.75% | `aggregated-de-only.txt` |
-| South Korea | KR | 4,031 | 4,030 | 11,174 | 2.79% | `aggregated-kr-only.txt` |
+| United States | US | 208,444 | 206,866 | 72,844 | 17.92% | `aggregated-us-only.txt` |
+| Canada | CA | 17,376 | 17,261 | 8,594 | 2.11% | `aggregated-ca-only.txt` |
+| United Kingdom | GB | 33,249 | 33,123 | 9,257 | 2.28% | `aggregated-gb-only.txt` |
+| Australia | AU | 11,332 | 11,274 | 5,453 | 1.34% | `aggregated-au-only.txt` |
+| Germany | DE | 27,316 | 27,187 | 15,172 | 3.73% | `aggregated-de-only.txt` |
+| South Korea | KR | 4,031 | 4,030 | 11,188 | 2.75% | `aggregated-kr-only.txt` |
 
 ## IP Sources
 
