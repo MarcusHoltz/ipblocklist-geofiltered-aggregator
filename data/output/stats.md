@@ -1,15 +1,15 @@
 # Multi-Country IP Aggregation Statistics
 
-**Last Updated:** 2025-12-30 03:47:27 UTC
+**Last Updated:** 2025-12-30 14:42:38 UTC
 
 ## 📈 Country Distribution
 
 ```mermaid
 pie showData title IP Blocklist Distribution by Country
-"United States" : 17.9
+"United States" : 17.8
 "Germany" : 4.3
 "South Korea" : 2.4
-"United Kingdom" : 2.2
+"United Kingdom" : 2.3
 "Canada" : 2.1
 "Australia" : 1.3
 "Other/Unfiltered" : 69.8
@@ -17,22 +17,22 @@ pie showData title IP Blocklist Distribution by Country
 
 ## Overall Summary
 
-- **Total Input IPs:** 431,791
+- **Total Input IPs:** 432,755
 - **Countries Processed:** 6
-- **Combined Unique IPs:** 130,535
+- **Combined Unique IPs:** 130,646
 - **Combined Output File:** `aggregated-multi-6countries-combined.txt`
-- **Overall Filter Rate:** 30.23%
+- **Overall Filter Rate:** 30.19%
 
 ## Per-Country Results
 
 | Country | Code | Networks Found | Networks Optimized | IPs Matched | Filter Rate | Output File |
 |---------|------|----------------|--------------------|-----------|-----------|-----------|
-| United States | US | 199,419 | 197,811 | 77,181 | 17.87% | `aggregated-us-only.txt` |
-| Canada | CA | 17,248 | 17,118 | 8,906 | 2.06% | `aggregated-ca-only.txt` |
-| United Kingdom | GB | 33,774 | 33,608 | 9,684 | 2.24% | `aggregated-gb-only.txt` |
-| Australia | AU | 11,596 | 11,526 | 5,769 | 1.34% | `aggregated-au-only.txt` |
-| Germany | DE | 27,528 | 27,389 | 18,440 | 4.27% | `aggregated-de-only.txt` |
-| South Korea | KR | 3,990 | 3,989 | 10,555 | 2.44% | `aggregated-kr-only.txt` |
+| United States | US | 199,419 | 197,811 | 77,113 | 17.82% | `aggregated-us-only.txt` |
+| Canada | CA | 17,248 | 17,118 | 9,074 | 2.10% | `aggregated-ca-only.txt` |
+| United Kingdom | GB | 33,774 | 33,608 | 9,740 | 2.25% | `aggregated-gb-only.txt` |
+| Australia | AU | 11,596 | 11,526 | 5,767 | 1.33% | `aggregated-au-only.txt` |
+| Germany | DE | 27,528 | 27,389 | 18,410 | 4.25% | `aggregated-de-only.txt` |
+| South Korea | KR | 3,990 | 3,989 | 10,542 | 2.44% | `aggregated-kr-only.txt` |
 
 ## IP Sources
 
