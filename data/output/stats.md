@@ -1,38 +1,38 @@
 # Multi-Country IP Aggregation Statistics
 
-**Last Updated:** 2025-12-31 03:46:44 UTC
+**Last Updated:** 2025-12-31 14:40:28 UTC
 
 ## 📈 Country Distribution
 
 ```mermaid
 pie showData title IP Blocklist Distribution by Country
-"United States" : 17.8
+"United States" : 17.9
 "Germany" : 4.3
+"United Kingdom" : 2.4
 "South Korea" : 2.4
-"United Kingdom" : 2.2
-"Canada" : 2.1
+"Canada" : 2.3
 "Australia" : 1.3
-"Other/Unfiltered" : 69.8
+"Other/Unfiltered" : 69.4
 ```
 
 ## Overall Summary
 
-- **Total Input IPs:** 430,657
+- **Total Input IPs:** 438,440
 - **Countries Processed:** 6
-- **Combined Unique IPs:** 130,017
+- **Combined Unique IPs:** 134,340
 - **Combined Output File:** `aggregated-multi-6countries-combined.txt`
-- **Overall Filter Rate:** 30.19%
+- **Overall Filter Rate:** 30.64%
 
 ## Per-Country Results
 
 | Country | Code | Networks Found | Networks Optimized | IPs Matched | Filter Rate | Output File |
 |---------|------|----------------|--------------------|-----------|-----------|-----------|
-| United States | US | 199,419 | 197,811 | 76,869 | 17.85% | `aggregated-us-only.txt` |
-| Canada | CA | 17,248 | 17,118 | 8,953 | 2.08% | `aggregated-ca-only.txt` |
-| United Kingdom | GB | 33,774 | 33,608 | 9,645 | 2.24% | `aggregated-gb-only.txt` |
-| Australia | AU | 11,596 | 11,526 | 5,719 | 1.33% | `aggregated-au-only.txt` |
-| Germany | DE | 27,528 | 27,389 | 18,396 | 4.27% | `aggregated-de-only.txt` |
-| South Korea | KR | 3,990 | 3,989 | 10,435 | 2.42% | `aggregated-kr-only.txt` |
+| United States | US | 199,419 | 197,811 | 78,673 | 17.94% | `aggregated-us-only.txt` |
+| Canada | CA | 17,248 | 17,118 | 9,928 | 2.26% | `aggregated-ca-only.txt` |
+| United Kingdom | GB | 33,774 | 33,608 | 10,690 | 2.44% | `aggregated-gb-only.txt` |
+| Australia | AU | 11,596 | 11,526 | 5,746 | 1.31% | `aggregated-au-only.txt` |
+| Germany | DE | 27,528 | 27,389 | 18,843 | 4.30% | `aggregated-de-only.txt` |
+| South Korea | KR | 3,990 | 3,989 | 10,460 | 2.39% | `aggregated-kr-only.txt` |
 
 ## IP Sources
 
