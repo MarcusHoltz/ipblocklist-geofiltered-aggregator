@@ -2,7 +2,7 @@
 
 ![Workflow Status](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/actions/workflows/ip-aggregation.yml/badge.svg)
 ![Countries](https://img.shields.io/badge/Countries-6-278EF5)
-![Total IPs Blocked](https://img.shields.io/badge/Blocked_IPs-560731-2D56A8)
+![Total IPs Blocked](https://img.shields.io/badge/Blocked_IPs-560321-2D56A8)
           
 ![Issues](https://img.shields.io/github/issues/MarcusHoltz/ipblocklist-geofiltered-aggregator)
 ![Last Commit](https://img.shields.io/github/last-commit/MarcusHoltz/ipblocklist-geofiltered-aggregator)
@@ -29,7 +29,7 @@ Automated IP blocklist aggregation with multi-country geographical filtering
 
 ### 📁 Generated Files
 
-- **`aggregated.txt`** - 560,731 total aggregated IPs from all sources
+- **`aggregated.txt`** - 560,321 total aggregated IPs from all sources
 
 ---
 
