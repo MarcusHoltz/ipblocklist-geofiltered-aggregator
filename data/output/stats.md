@@ -1,38 +1,38 @@
 # Multi-Country IP Aggregation Statistics
 
-**Last Updated:** 2026-01-13 14:48:51 UTC
+**Last Updated:** 2026-01-14 03:57:21 UTC
 
 ## 📈 Country Distribution
 
 ```mermaid
 pie showData title IP Blocklist Distribution by Country
-"United States" : 16.9
-"Germany" : 3.7
-"Canada" : 2.3
+"United States" : 16.8
+"Germany" : 3.6
+"Canada" : 2.4
 "United Kingdom" : 2.3
 "South Korea" : 2.0
 "Australia" : 1.1
-"Other/Unfiltered" : 71.7
+"Other/Unfiltered" : 71.9
 ```
 
 ## Overall Summary
 
-- **Total Input IPs:** 511,147
+- **Total Input IPs:** 522,938
 - **Countries Processed:** 6
-- **Combined Unique IPs:** 144,795
+- **Combined Unique IPs:** 147,078
 - **Combined Output File:** `aggregated-multi-6countries-combined.txt`
-- **Overall Filter Rate:** 28.33%
+- **Overall Filter Rate:** 28.13%
 
 ## Per-Country Results
 
 | Country | Code | Networks Found | Networks Optimized | IPs Matched | Filter Rate | Output File |
 |---------|------|----------------|--------------------|-----------|-----------|-----------|
-| United States | US | 194,691 | 193,051 | 86,237 | 16.87% | `aggregated-us-only.txt` |
-| Canada | CA | 17,361 | 17,238 | 12,003 | 2.35% | `aggregated-ca-only.txt` |
-| United Kingdom | GB | 33,705 | 33,541 | 11,888 | 2.33% | `aggregated-gb-only.txt` |
-| Australia | AU | 11,514 | 11,445 | 5,669 | 1.11% | `aggregated-au-only.txt` |
-| Germany | DE | 27,639 | 27,491 | 18,773 | 3.67% | `aggregated-de-only.txt` |
-| South Korea | KR | 3,991 | 3,977 | 10,225 | 2.00% | `aggregated-kr-only.txt` |
+| United States | US | 194,691 | 193,051 | 87,752 | 16.78% | `aggregated-us-only.txt` |
+| Canada | CA | 17,361 | 17,238 | 12,293 | 2.35% | `aggregated-ca-only.txt` |
+| United Kingdom | GB | 33,705 | 33,541 | 12,130 | 2.32% | `aggregated-gb-only.txt` |
+| Australia | AU | 11,514 | 11,445 | 5,732 | 1.10% | `aggregated-au-only.txt` |
+| Germany | DE | 27,639 | 27,491 | 18,898 | 3.61% | `aggregated-de-only.txt` |
+| South Korea | KR | 3,991 | 3,977 | 10,273 | 1.96% | `aggregated-kr-only.txt` |
 
 ## IP Sources
 
