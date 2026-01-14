@@ -1,38 +1,38 @@
 # Multi-Country IP Aggregation Statistics
 
-**Last Updated:** 2026-01-14 03:57:21 UTC
+**Last Updated:** 2026-01-14 14:47:48 UTC
 
 ## 📈 Country Distribution
 
 ```mermaid
 pie showData title IP Blocklist Distribution by Country
-"United States" : 16.8
-"Germany" : 3.6
-"Canada" : 2.4
+"United States" : 16.4
+"Germany" : 3.5
 "United Kingdom" : 2.3
-"South Korea" : 2.0
+"Canada" : 2.2
+"South Korea" : 1.9
 "Australia" : 1.1
-"Other/Unfiltered" : 71.9
+"Other/Unfiltered" : 72.6
 ```
 
 ## Overall Summary
 
-- **Total Input IPs:** 522,938
+- **Total Input IPs:** 544,780
 - **Countries Processed:** 6
-- **Combined Unique IPs:** 147,078
+- **Combined Unique IPs:** 149,062
 - **Combined Output File:** `aggregated-multi-6countries-combined.txt`
-- **Overall Filter Rate:** 28.13%
+- **Overall Filter Rate:** 27.36%
 
 ## Per-Country Results
 
 | Country | Code | Networks Found | Networks Optimized | IPs Matched | Filter Rate | Output File |
 |---------|------|----------------|--------------------|-----------|-----------|-----------|
-| United States | US | 194,691 | 193,051 | 87,752 | 16.78% | `aggregated-us-only.txt` |
-| Canada | CA | 17,361 | 17,238 | 12,293 | 2.35% | `aggregated-ca-only.txt` |
-| United Kingdom | GB | 33,705 | 33,541 | 12,130 | 2.32% | `aggregated-gb-only.txt` |
-| Australia | AU | 11,514 | 11,445 | 5,732 | 1.10% | `aggregated-au-only.txt` |
-| Germany | DE | 27,639 | 27,491 | 18,898 | 3.61% | `aggregated-de-only.txt` |
-| South Korea | KR | 3,991 | 3,977 | 10,273 | 1.96% | `aggregated-kr-only.txt` |
+| United States | US | 194,691 | 193,051 | 89,489 | 16.43% | `aggregated-us-only.txt` |
+| Canada | CA | 17,361 | 17,238 | 11,821 | 2.17% | `aggregated-ca-only.txt` |
+| United Kingdom | GB | 33,705 | 33,541 | 12,386 | 2.27% | `aggregated-gb-only.txt` |
+| Australia | AU | 11,514 | 11,445 | 5,917 | 1.09% | `aggregated-au-only.txt` |
+| Germany | DE | 27,639 | 27,491 | 19,197 | 3.52% | `aggregated-de-only.txt` |
+| South Korea | KR | 3,991 | 3,977 | 10,252 | 1.88% | `aggregated-kr-only.txt` |
 
 ## IP Sources
 
