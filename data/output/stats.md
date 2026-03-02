@@ -1,38 +1,38 @@
 # Multi-Country IP Aggregation Statistics
 
-**Last Updated:** 2026-03-01 14:45:02 UTC
+**Last Updated:** 2026-03-02 04:24:48 UTC
 
 ## 📈 Country Distribution
 
 ```mermaid
 pie showData title IP Blocklist Distribution by Country
 "United States" : 19.3
-"Germany" : 4.3
+"Germany" : 4.4
 "United Kingdom" : 2.7
 "Canada" : 2.3
-"Australia" : 2.0
-"South Korea" : 1.8
-"Other/Unfiltered" : 67.6
+"Australia" : 2.1
+"South Korea" : 1.7
+"Other/Unfiltered" : 67.4
 ```
 
 ## Overall Summary
 
-- **Total Input IPs:** 385,688
+- **Total Input IPs:** 386,011
 - **Countries Processed:** 6
-- **Combined Unique IPs:** 124,904
+- **Combined Unique IPs:** 125,791
 - **Combined Output File:** `aggregated-multi-6countries-combined.txt`
-- **Overall Filter Rate:** 32.38%
+- **Overall Filter Rate:** 32.59%
 
 ## Per-Country Results
 
 | Country | Code | Networks Found | Networks Optimized | IPs Matched | Filter Rate | Output File |
 |---------|------|----------------|--------------------|-----------|-----------|-----------|
-| United States | US | 184,107 | 182,462 | 74,477 | 19.31% | `aggregated-us-only.txt` |
-| Canada | CA | 16,752 | 16,621 | 8,857 | 2.30% | `aggregated-ca-only.txt` |
-| United Kingdom | GB | 33,936 | 33,761 | 10,289 | 2.67% | `aggregated-gb-only.txt` |
-| Australia | AU | 11,343 | 11,264 | 7,754 | 2.01% | `aggregated-au-only.txt` |
-| Germany | DE | 28,037 | 27,936 | 16,774 | 4.35% | `aggregated-de-only.txt` |
-| South Korea | KR | 4,019 | 4,018 | 6,753 | 1.75% | `aggregated-kr-only.txt` |
+| United States | US | 184,107 | 182,462 | 74,615 | 19.33% | `aggregated-us-only.txt` |
+| Canada | CA | 16,752 | 16,621 | 8,887 | 2.30% | `aggregated-ca-only.txt` |
+| United Kingdom | GB | 33,936 | 33,761 | 10,595 | 2.74% | `aggregated-gb-only.txt` |
+| Australia | AU | 11,343 | 11,264 | 7,960 | 2.06% | `aggregated-au-only.txt` |
+| Germany | DE | 28,037 | 27,936 | 17,013 | 4.41% | `aggregated-de-only.txt` |
+| South Korea | KR | 4,019 | 4,018 | 6,721 | 1.74% | `aggregated-kr-only.txt` |
 
 ## IP Sources
 
