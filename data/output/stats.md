@@ -1,6 +1,6 @@
 # Multi-Country IP Aggregation Statistics
 
-**Last Updated:** 2026-05-09 05:31:54 UTC
+**Last Updated:** 2026-05-09 15:16:16 UTC
 
 ## 📈 Country Distribution
 
@@ -8,7 +8,7 @@
 pie showData title IP Blocklist Distribution by Country
 "United States" : 17.5
 "Germany" : 4.6
-"United Kingdom" : 3.6
+"United Kingdom" : 3.5
 "Australia" : 2.4
 "Canada" : 2.4
 "South Korea" : 1.4
@@ -17,9 +17,9 @@ pie showData title IP Blocklist Distribution by Country
 
 ## Overall Summary
 
-- **Total Input IPs:** 453,225
+- **Total Input IPs:** 454,754
 - **Countries Processed:** 6
-- **Combined Unique IPs:** 144,624
+- **Combined Unique IPs:** 145,090
 - **Combined Output File:** `aggregated-multi-6countries-combined.txt`
 - **Overall Filter Rate:** 31.91%
 
@@ -27,12 +27,12 @@ pie showData title IP Blocklist Distribution by Country
 
 | Country | Code | Networks Found | Networks Optimized | IPs Matched | Filter Rate | Output File |
 |---------|------|----------------|--------------------|-----------|-----------|-----------|
-| United States | US | 169,198 | 167,680 | 79,379 | 17.51% | `aggregated-us-only.txt` |
-| Canada | CA | 16,890 | 16,768 | 10,787 | 2.38% | `aggregated-ca-only.txt` |
-| United Kingdom | GB | 33,411 | 33,252 | 16,097 | 3.55% | `aggregated-gb-only.txt` |
-| Australia | AU | 11,396 | 11,317 | 10,911 | 2.41% | `aggregated-au-only.txt` |
-| Germany | DE | 28,972 | 28,867 | 20,912 | 4.61% | `aggregated-de-only.txt` |
-| South Korea | KR | 4,006 | 3,996 | 6,538 | 1.44% | `aggregated-kr-only.txt` |
+| United States | US | 169,198 | 167,680 | 79,671 | 17.52% | `aggregated-us-only.txt` |
+| Canada | CA | 16,890 | 16,768 | 10,812 | 2.38% | `aggregated-ca-only.txt` |
+| United Kingdom | GB | 33,411 | 33,252 | 16,134 | 3.55% | `aggregated-gb-only.txt` |
+| Australia | AU | 11,396 | 11,317 | 10,918 | 2.40% | `aggregated-au-only.txt` |
+| Germany | DE | 28,972 | 28,867 | 21,005 | 4.62% | `aggregated-de-only.txt` |
+| South Korea | KR | 4,006 | 3,996 | 6,550 | 1.44% | `aggregated-kr-only.txt` |
 
 ## IP Sources
 
