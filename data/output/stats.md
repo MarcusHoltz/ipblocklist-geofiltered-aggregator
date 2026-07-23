@@ -1,38 +1,38 @@
 # Multi-Country IP Aggregation Statistics
 
-**Last Updated:** 2026-07-22 15:53:57 UTC
+**Last Updated:** 2026-07-23 05:36:55 UTC
 
 ## 📈 Country Distribution
 
 ```mermaid
 pie showData title IP Blocklist Distribution by Country
-"United States" : 17.8
+"United States" : 17.7
 "Germany" : 4.5
 "United Kingdom" : 2.3
-"Canada" : 2.0
-"Australia" : 1.6
+"Canada" : 1.9
+"Australia" : 1.5
 "South Korea" : 1.5
-"Other/Unfiltered" : 70.3
+"Other/Unfiltered" : 70.6
 ```
 
 ## Overall Summary
 
-- **Total Input IPs:** 438,549
+- **Total Input IPs:** 437,943
 - **Countries Processed:** 6
-- **Combined Unique IPs:** 130,154
+- **Combined Unique IPs:** 128,712
 - **Combined Output File:** `aggregated-multi-6countries-combined.txt`
-- **Overall Filter Rate:** 29.68%
+- **Overall Filter Rate:** 29.39%
 
 ## Per-Country Results
 
 | Country | Code | Networks Found | Networks Optimized | IPs Matched | Filter Rate | Output File |
 |---------|------|----------------|--------------------|-----------|-----------|-----------|
-| United States | US | 137,787 | 135,973 | 78,143 | 17.82% | `aggregated-us-only.txt` |
-| Canada | CA | 16,857 | 16,741 | 8,556 | 1.95% | `aggregated-ca-only.txt` |
-| United Kingdom | GB | 35,446 | 35,279 | 10,109 | 2.31% | `aggregated-gb-only.txt` |
-| Australia | AU | 12,109 | 12,038 | 7,057 | 1.61% | `aggregated-au-only.txt` |
-| Germany | DE | 29,153 | 29,083 | 19,870 | 4.53% | `aggregated-de-only.txt` |
-| South Korea | KR | 3,909 | 3,899 | 6,419 | 1.46% | `aggregated-kr-only.txt` |
+| United States | US | 137,787 | 135,973 | 77,629 | 17.73% | `aggregated-us-only.txt` |
+| Canada | CA | 16,857 | 16,741 | 8,413 | 1.92% | `aggregated-ca-only.txt` |
+| United Kingdom | GB | 35,446 | 35,279 | 9,882 | 2.26% | `aggregated-gb-only.txt` |
+| Australia | AU | 12,109 | 12,038 | 6,697 | 1.53% | `aggregated-au-only.txt` |
+| Germany | DE | 29,153 | 29,083 | 19,683 | 4.49% | `aggregated-de-only.txt` |
+| South Korea | KR | 3,909 | 3,899 | 6,408 | 1.46% | `aggregated-kr-only.txt` |
 
 ## IP Sources
 
