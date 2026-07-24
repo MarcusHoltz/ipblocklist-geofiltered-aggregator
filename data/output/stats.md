@@ -1,38 +1,38 @@
 # Multi-Country IP Aggregation Statistics
 
-**Last Updated:** 2026-07-23 16:04:39 UTC
+**Last Updated:** 2026-07-24 05:32:20 UTC
 
 ## 📈 Country Distribution
 
 ```mermaid
 pie showData title IP Blocklist Distribution by Country
-"United States" : 17.7
+"United States" : 17.8
 "Germany" : 4.5
-"United Kingdom" : 2.3
+"United Kingdom" : 2.2
 "Canada" : 1.9
-"Australia" : 1.5
-"South Korea" : 1.5
-"Other/Unfiltered" : 70.6
+"South Korea" : 1.4
+"Australia" : 1.4
+"Other/Unfiltered" : 70.7
 ```
 
 ## Overall Summary
 
-- **Total Input IPs:** 440,729
+- **Total Input IPs:** 441,417
 - **Countries Processed:** 6
-- **Combined Unique IPs:** 129,399
+- **Combined Unique IPs:** 129,171
 - **Combined Output File:** `aggregated-multi-6countries-combined.txt`
-- **Overall Filter Rate:** 29.36%
+- **Overall Filter Rate:** 29.26%
 
 ## Per-Country Results
 
 | Country | Code | Networks Found | Networks Optimized | IPs Matched | Filter Rate | Output File |
 |---------|------|----------------|--------------------|-----------|-----------|-----------|
-| United States | US | 137,787 | 135,973 | 78,164 | 17.74% | `aggregated-us-only.txt` |
-| Canada | CA | 16,857 | 16,741 | 8,384 | 1.90% | `aggregated-ca-only.txt` |
-| United Kingdom | GB | 35,446 | 35,279 | 9,993 | 2.27% | `aggregated-gb-only.txt` |
-| Australia | AU | 12,109 | 12,038 | 6,702 | 1.52% | `aggregated-au-only.txt` |
-| Germany | DE | 29,153 | 29,083 | 19,741 | 4.48% | `aggregated-de-only.txt` |
-| South Korea | KR | 3,909 | 3,899 | 6,415 | 1.46% | `aggregated-kr-only.txt` |
+| United States | US | 137,787 | 135,973 | 78,538 | 17.79% | `aggregated-us-only.txt` |
+| Canada | CA | 16,857 | 16,741 | 8,276 | 1.87% | `aggregated-ca-only.txt` |
+| United Kingdom | GB | 35,446 | 35,279 | 9,846 | 2.23% | `aggregated-gb-only.txt` |
+| Australia | AU | 12,109 | 12,038 | 6,382 | 1.45% | `aggregated-au-only.txt` |
+| Germany | DE | 29,153 | 29,083 | 19,737 | 4.47% | `aggregated-de-only.txt` |
+| South Korea | KR | 3,909 | 3,899 | 6,392 | 1.45% | `aggregated-kr-only.txt` |
 
 ## IP Sources
 
