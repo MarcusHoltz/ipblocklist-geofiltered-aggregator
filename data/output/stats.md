@@ -1,38 +1,38 @@
 # Multi-Country IP Aggregation Statistics
 
-**Last Updated:** 2026-08-17 03:16:05 UTC
+**Last Updated:** 2026-08-17 14:49:24 UTC
 
 ## 📈 Country Distribution
 
 ```mermaid
 pie showData title IP Blocklist Distribution by Country
-"United States" : 18.6
-"Germany" : 3.4
-"United Kingdom" : 1.9
-"Canada" : 1.7
-"South Korea" : 1.4
-"Australia" : 0.9
-"Other/Unfiltered" : 72.0
+"United States" : 18.1
+"Germany" : 2.9
+"Canada" : 2.2
+"United Kingdom" : 2.0
+"South Korea" : 1.3
+"Australia" : 1.1
+"Other/Unfiltered" : 72.4
 ```
 
 ## Overall Summary
 
-- **Total Input IPs:** 462,766
+- **Total Input IPs:** 272,910
 - **Countries Processed:** 6
-- **Combined Unique IPs:** 129,456
+- **Combined Unique IPs:** 75,257
 - **Combined Output File:** `aggregated-multi-6countries-combined.txt`
-- **Overall Filter Rate:** 27.97%
+- **Overall Filter Rate:** 27.58%
 
 ## Per-Country Results
 
 | Country | Code | Networks Found | Networks Optimized | IPs Matched | Filter Rate | Output File |
 |---------|------|----------------|--------------------|-----------|-----------|-----------|
-| United States | US | 131,721 | 129,853 | 86,218 | 18.63% | `aggregated-us-only.txt` |
-| Canada | CA | 17,158 | 17,035 | 8,038 | 1.74% | `aggregated-ca-only.txt` |
-| United Kingdom | GB | 35,713 | 35,551 | 8,946 | 1.93% | `aggregated-gb-only.txt` |
-| Australia | AU | 12,195 | 12,123 | 4,127 | 0.89% | `aggregated-au-only.txt` |
-| Germany | DE | 29,761 | 29,693 | 15,752 | 3.40% | `aggregated-de-only.txt` |
-| South Korea | KR | 3,928 | 3,918 | 6,375 | 1.38% | `aggregated-kr-only.txt` |
+| United States | US | 131,721 | 129,853 | 49,378 | 18.09% | `aggregated-us-only.txt` |
+| Canada | CA | 17,158 | 17,035 | 5,946 | 2.18% | `aggregated-ca-only.txt` |
+| United Kingdom | GB | 35,713 | 35,551 | 5,429 | 1.99% | `aggregated-gb-only.txt` |
+| Australia | AU | 12,195 | 12,123 | 2,907 | 1.07% | `aggregated-au-only.txt` |
+| Germany | DE | 29,761 | 29,693 | 7,935 | 2.91% | `aggregated-de-only.txt` |
+| South Korea | KR | 3,928 | 3,918 | 3,662 | 1.34% | `aggregated-kr-only.txt` |
 
 ## IP Sources
 
