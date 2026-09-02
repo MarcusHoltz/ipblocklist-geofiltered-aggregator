@@ -1,6 +1,6 @@
 # Multi-Country IP Aggregation Statistics
 
-**Last Updated:** 2026-09-02 07:10:22 UTC
+**Last Updated:** 2026-09-02 17:57:03 UTC
 
 ## 📈 Country Distribution
 
@@ -9,7 +9,7 @@ pie showData title IP Blocklist Distribution by Country
 "United States" : 20.6
 "Germany" : 3.1
 "United Kingdom" : 1.9
-"Canada" : 1.7
+"Canada" : 1.6
 "South Korea" : 1.3
 "Australia" : 0.8
 "Other/Unfiltered" : 70.7
@@ -17,22 +17,22 @@ pie showData title IP Blocklist Distribution by Country
 
 ## Overall Summary
 
-- **Total Input IPs:** 474,071
+- **Total Input IPs:** 476,250
 - **Countries Processed:** 6
-- **Combined Unique IPs:** 139,011
+- **Combined Unique IPs:** 139,371
 - **Combined Output File:** `aggregated-multi-6countries-combined.txt`
-- **Overall Filter Rate:** 29.32%
+- **Overall Filter Rate:** 29.26%
 
 ## Per-Country Results
 
 | Country | Code | Networks Found | Networks Optimized | IPs Matched | Filter Rate | Output File |
 |---------|------|----------------|--------------------|-----------|-----------|-----------|
-| United States | US | 130,784 | 128,927 | 97,689 | 20.61% | `aggregated-us-only.txt` |
-| Canada | CA | 17,155 | 17,039 | 7,886 | 1.66% | `aggregated-ca-only.txt` |
-| United Kingdom | GB | 35,780 | 35,619 | 8,923 | 1.88% | `aggregated-gb-only.txt` |
-| Australia | AU | 12,241 | 12,174 | 3,582 | 0.76% | `aggregated-au-only.txt` |
-| Germany | DE | 29,886 | 29,769 | 14,672 | 3.09% | `aggregated-de-only.txt` |
-| South Korea | KR | 3,921 | 3,910 | 6,259 | 1.32% | `aggregated-kr-only.txt` |
+| United States | US | 130,784 | 128,927 | 97,923 | 20.56% | `aggregated-us-only.txt` |
+| Canada | CA | 17,155 | 17,039 | 7,842 | 1.65% | `aggregated-ca-only.txt` |
+| United Kingdom | GB | 35,780 | 35,619 | 8,991 | 1.89% | `aggregated-gb-only.txt` |
+| Australia | AU | 12,241 | 12,174 | 3,603 | 0.76% | `aggregated-au-only.txt` |
+| Germany | DE | 29,886 | 29,769 | 14,736 | 3.09% | `aggregated-de-only.txt` |
+| South Korea | KR | 3,921 | 3,910 | 6,276 | 1.32% | `aggregated-kr-only.txt` |
 
 ## IP Sources
 
