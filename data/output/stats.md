@@ -1,15 +1,15 @@
 # Multi-Country IP Aggregation Statistics
 
-**Last Updated:** 2026-09-13 07:32:22 UTC
+**Last Updated:** 2026-09-13 17:27:51 UTC
 
 ## 📈 Country Distribution
 
 ```mermaid
 pie showData title IP Blocklist Distribution by Country
-"United States" : 21.4
+"United States" : 21.5
 "Germany" : 2.7
 "United Kingdom" : 2.0
-"Canada" : 1.6
+"Canada" : 1.5
 "South Korea" : 1.1
 "Australia" : 0.7
 "Other/Unfiltered" : 70.5
@@ -17,22 +17,22 @@ pie showData title IP Blocklist Distribution by Country
 
 ## Overall Summary
 
-- **Total Input IPs:** 755,268
+- **Total Input IPs:** 757,836
 - **Countries Processed:** 6
-- **Combined Unique IPs:** 222,524
+- **Combined Unique IPs:** 223,702
 - **Combined Output File:** `aggregated-multi-6countries-combined.txt`
-- **Overall Filter Rate:** 29.46%
+- **Overall Filter Rate:** 29.52%
 
 ## Per-Country Results
 
 | Country | Code | Networks Found | Networks Optimized | IPs Matched | Filter Rate | Output File |
 |---------|------|----------------|--------------------|-----------|-----------|-----------|
-| United States | US | 130,348 | 128,515 | 161,860 | 21.43% | `aggregated-us-only.txt` |
-| Canada | CA | 17,287 | 17,169 | 11,799 | 1.56% | `aggregated-ca-only.txt` |
-| United Kingdom | GB | 36,372 | 36,194 | 15,135 | 2.00% | `aggregated-gb-only.txt` |
-| Australia | AU | 12,330 | 12,258 | 5,197 | 0.69% | `aggregated-au-only.txt` |
-| Germany | DE | 29,911 | 29,797 | 20,280 | 2.69% | `aggregated-de-only.txt` |
-| South Korea | KR | 3,952 | 3,918 | 8,253 | 1.09% | `aggregated-kr-only.txt` |
+| United States | US | 130,348 | 128,515 | 162,666 | 21.46% | `aggregated-us-only.txt` |
+| Canada | CA | 17,287 | 17,169 | 11,722 | 1.55% | `aggregated-ca-only.txt` |
+| United Kingdom | GB | 36,372 | 36,194 | 15,524 | 2.05% | `aggregated-gb-only.txt` |
+| Australia | AU | 12,330 | 12,258 | 5,203 | 0.69% | `aggregated-au-only.txt` |
+| Germany | DE | 29,911 | 29,797 | 20,314 | 2.68% | `aggregated-de-only.txt` |
+| South Korea | KR | 3,952 | 3,918 | 8,273 | 1.09% | `aggregated-kr-only.txt` |
 
 ## IP Sources
 
