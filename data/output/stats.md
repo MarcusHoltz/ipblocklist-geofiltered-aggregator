@@ -1,38 +1,38 @@
 # Multi-Country IP Aggregation Statistics
 
-**Last Updated:** 2026-09-25 18:50:53 UTC
+**Last Updated:** 2026-09-26 07:50:05 UTC
 
 ## 📈 Country Distribution
 
 ```mermaid
 pie showData title IP Blocklist Distribution by Country
-"United States" : 20.9
-"Germany" : 3.1
+"United States" : 20.8
+"Germany" : 3.0
 "United Kingdom" : 1.9
-"Canada" : 1.6
+"Canada" : 1.5
 "South Korea" : 1.4
 "Australia" : 0.7
-"Other/Unfiltered" : 70.4
+"Other/Unfiltered" : 70.6
 ```
 
 ## Overall Summary
 
-- **Total Input IPs:** 744,214
+- **Total Input IPs:** 724,279
 - **Countries Processed:** 6
-- **Combined Unique IPs:** 220,042
+- **Combined Unique IPs:** 213,006
 - **Combined Output File:** `aggregated-multi-6countries-combined.txt`
-- **Overall Filter Rate:** 29.57%
+- **Overall Filter Rate:** 29.41%
 
 ## Per-Country Results
 
 | Country | Code | Networks Found | Networks Optimized | IPs Matched | Filter Rate | Output File |
 |---------|------|----------------|--------------------|-----------|-----------|-----------|
-| United States | US | 128,919 | 127,081 | 155,173 | 20.85% | `aggregated-us-only.txt` |
-| Canada | CA | 17,281 | 17,163 | 11,696 | 1.57% | `aggregated-ca-only.txt` |
-| United Kingdom | GB | 36,037 | 35,862 | 14,410 | 1.94% | `aggregated-gb-only.txt` |
-| Australia | AU | 12,686 | 12,614 | 5,339 | 0.72% | `aggregated-au-only.txt` |
-| Germany | DE | 29,692 | 29,583 | 22,705 | 3.05% | `aggregated-de-only.txt` |
-| South Korea | KR | 3,953 | 3,919 | 10,719 | 1.44% | `aggregated-kr-only.txt` |
+| United States | US | 128,919 | 127,081 | 150,785 | 20.82% | `aggregated-us-only.txt` |
+| Canada | CA | 17,281 | 17,163 | 11,023 | 1.52% | `aggregated-ca-only.txt` |
+| United Kingdom | GB | 36,037 | 35,862 | 13,648 | 1.88% | `aggregated-gb-only.txt` |
+| Australia | AU | 12,686 | 12,614 | 5,161 | 0.71% | `aggregated-au-only.txt` |
+| Germany | DE | 29,692 | 29,583 | 21,905 | 3.02% | `aggregated-de-only.txt` |
+| South Korea | KR | 3,953 | 3,919 | 10,484 | 1.45% | `aggregated-kr-only.txt` |
 
 ## IP Sources
 
