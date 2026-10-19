@@ -1,38 +1,38 @@
 # Multi-Country IP Aggregation Statistics
 
-**Last Updated:** 2026-10-18 17:26:55 UTC
+**Last Updated:** 2026-10-19 07:54:51 UTC
 
 ## 📈 Country Distribution
 
 ```mermaid
 pie showData title IP Blocklist Distribution by Country
-"United States" : 21.3
-"Germany" : 3.4
+"United States" : 21.1
+"Germany" : 3.3
 "United Kingdom" : 2.1
 "Canada" : 1.6
-"South Korea" : 1.4
+"South Korea" : 1.3
 "Australia" : 0.7
-"Other/Unfiltered" : 69.5
+"Other/Unfiltered" : 69.8
 ```
 
 ## Overall Summary
 
-- **Total Input IPs:** 885,843
+- **Total Input IPs:** 914,422
 - **Countries Processed:** 6
-- **Combined Unique IPs:** 269,801
+- **Combined Unique IPs:** 275,976
 - **Combined Output File:** `aggregated-multi-6countries-combined.txt`
-- **Overall Filter Rate:** 30.46%
+- **Overall Filter Rate:** 30.18%
 
 ## Per-Country Results
 
 | Country | Code | Networks Found | Networks Optimized | IPs Matched | Filter Rate | Output File |
 |---------|------|----------------|--------------------|-----------|-----------|-----------|
-| United States | US | 128,606 | 126,734 | 189,046 | 21.34% | `aggregated-us-only.txt` |
-| Canada | CA | 17,658 | 17,529 | 14,255 | 1.61% | `aggregated-ca-only.txt` |
-| United Kingdom | GB | 36,427 | 36,255 | 18,556 | 2.09% | `aggregated-gb-only.txt` |
-| Australia | AU | 12,448 | 12,375 | 6,058 | 0.68% | `aggregated-au-only.txt` |
-| Germany | DE | 30,436 | 30,330 | 29,873 | 3.37% | `aggregated-de-only.txt` |
-| South Korea | KR | 3,994 | 3,971 | 12,013 | 1.36% | `aggregated-kr-only.txt` |
+| United States | US | 128,606 | 126,734 | 193,202 | 21.13% | `aggregated-us-only.txt` |
+| Canada | CA | 17,658 | 17,529 | 14,636 | 1.60% | `aggregated-ca-only.txt` |
+| United Kingdom | GB | 36,427 | 36,255 | 19,263 | 2.11% | `aggregated-gb-only.txt` |
+| Australia | AU | 12,448 | 12,375 | 6,149 | 0.67% | `aggregated-au-only.txt` |
+| Germany | DE | 30,436 | 30,330 | 30,579 | 3.34% | `aggregated-de-only.txt` |
+| South Korea | KR | 3,994 | 3,971 | 12,147 | 1.33% | `aggregated-kr-only.txt` |
 
 ## IP Sources
 
