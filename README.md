@@ -2,7 +2,7 @@
 
 ![Workflow Status](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/actions/workflows/ip-aggregation.yml/badge.svg)
 ![Countries](https://img.shields.io/badge/Countries-6-278EF5)
-![Total IPs Blocked](https://img.shields.io/badge/Blocked_IPs-843431-2D56A8)
+![Total IPs Blocked](https://img.shields.io/badge/Blocked_IPs-852065-2D56A8)
           
 ![Issues](https://img.shields.io/github/issues/MarcusHoltz/ipblocklist-geofiltered-aggregator)
 ![Last Commit](https://img.shields.io/github/last-commit/MarcusHoltz/ipblocklist-geofiltered-aggregator)
@@ -27,7 +27,7 @@ Automated IP blocklist aggregation with multi-country geographical filtering
 
 ## 📊 Latest Statistics
 
-**Last Updated:** 2026-10-30 08:46:29 UTC
+**Last Updated:** 2026-10-30 19:29:13 UTC
 
 ## 📈 Country Distribution
 
@@ -38,28 +38,28 @@ pie showData title IP Blocklist Distribution by Country
 "United Kingdom" : 2.0
 "Canada" : 1.6
 "South Korea" : 1.3
-"Australia" : 0.6
-"Other/Unfiltered" : 67.9
+"Australia" : 0.7
+"Other/Unfiltered" : 67.8
 ```
 
 ## Overall Summary
 
-- **Total Input IPs:** 843,431
+- **Total Input IPs:** 852,065
 - **Countries Processed:** 6
-- **Combined Unique IPs:** 271,032
+- **Combined Unique IPs:** 274,121
 - **Combined Output File:** `aggregated-multi-6countries-combined.txt`
-- **Overall Filter Rate:** 32.13%
+- **Overall Filter Rate:** 32.17%
 
 ## Per-Country Results
 
 | Country | Code | Networks Found | Networks Optimized | IPs Matched | Filter Rate | Output File |
 |---------|------|----------------|--------------------|-----------|-----------|-----------|
-| United States | US | 129,057 | 127,188 | 192,621 | 22.84% | `aggregated-us-only.txt` |
-| Canada | CA | 17,613 | 17,490 | 13,153 | 1.56% | `aggregated-ca-only.txt` |
-| United Kingdom | GB | 36,267 | 36,097 | 17,113 | 2.03% | `aggregated-gb-only.txt` |
-| Australia | AU | 12,281 | 12,208 | 5,432 | 0.64% | `aggregated-au-only.txt` |
-| Germany | DE | 30,284 | 30,174 | 31,470 | 3.73% | `aggregated-de-only.txt` |
-| South Korea | KR | 4,030 | 4,002 | 11,243 | 1.33% | `aggregated-kr-only.txt` |
+| United States | US | 129,057 | 127,188 | 194,651 | 22.84% | `aggregated-us-only.txt` |
+| Canada | CA | 17,613 | 17,490 | 13,426 | 1.58% | `aggregated-ca-only.txt` |
+| United Kingdom | GB | 36,267 | 36,097 | 17,428 | 2.05% | `aggregated-gb-only.txt` |
+| Australia | AU | 12,281 | 12,208 | 5,544 | 0.65% | `aggregated-au-only.txt` |
+| Germany | DE | 30,284 | 30,174 | 31,767 | 3.73% | `aggregated-de-only.txt` |
+| South Korea | KR | 4,030 | 4,002 | 11,305 | 1.33% | `aggregated-kr-only.txt` |
 
 ## IP Sources
 
@@ -83,14 +83,14 @@ pie showData title IP Blocklist Distribution by Country
 
 ### 📁 Generated Files
 
-- **`aggregated.txt`** - 843,431 total aggregated IPs from all sources
-- **`aggregated-au-only.txt`** - 5,432 IPs from AU
-- **`aggregated-ca-only.txt`** - 13,153 IPs from CA
-- **`aggregated-de-only.txt`** - 31,470 IPs from DE
-- **`aggregated-gb-only.txt`** - 17,113 IPs from GB
-- **`aggregated-kr-only.txt`** - 11,243 IPs from KR
-- **`aggregated-us-only.txt`** - 192,621 IPs from US
-- **`aggregated-multi-6countries-combined.txt`** - 271,032 unique IPs (deduplicated across all countries)
+- **`aggregated.txt`** - 852,065 total aggregated IPs from all sources
+- **`aggregated-au-only.txt`** - 5,544 IPs from AU
+- **`aggregated-ca-only.txt`** - 13,426 IPs from CA
+- **`aggregated-de-only.txt`** - 31,767 IPs from DE
+- **`aggregated-gb-only.txt`** - 17,428 IPs from GB
+- **`aggregated-kr-only.txt`** - 11,305 IPs from KR
+- **`aggregated-us-only.txt`** - 194,651 IPs from US
+- **`aggregated-multi-6countries-combined.txt`** - 274,121 unique IPs (deduplicated across all countries)
 
 ---
 
