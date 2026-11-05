@@ -1,38 +1,38 @@
 # Multi-Country IP Aggregation Statistics
 
-**Last Updated:** 2026-11-04 20:52:49 UTC
+**Last Updated:** 2026-11-05 09:37:11 UTC
 
 ## 📈 Country Distribution
 
 ```mermaid
 pie showData title IP Blocklist Distribution by Country
-"United States" : 23.0
-"Germany" : 3.7
+"United States" : 23.1
+"Germany" : 3.6
 "United Kingdom" : 2.1
 "Canada" : 1.6
 "South Korea" : 1.3
-"Australia" : 0.7
-"Other/Unfiltered" : 67.6
+"Australia" : 0.6
+"Other/Unfiltered" : 67.7
 ```
 
 ## Overall Summary
 
-- **Total Input IPs:** 887,757
+- **Total Input IPs:** 875,395
 - **Countries Processed:** 6
-- **Combined Unique IPs:** 287,415
+- **Combined Unique IPs:** 283,005
 - **Combined Output File:** `aggregated-multi-6countries-combined.txt`
-- **Overall Filter Rate:** 32.38%
+- **Overall Filter Rate:** 32.33%
 
 ## Per-Country Results
 
 | Country | Code | Networks Found | Networks Optimized | IPs Matched | Filter Rate | Output File |
 |---------|------|----------------|--------------------|-----------|-----------|-----------|
-| United States | US | 129,071 | 127,174 | 204,488 | 23.03% | `aggregated-us-only.txt` |
-| Canada | CA | 17,665 | 17,536 | 14,235 | 1.60% | `aggregated-ca-only.txt` |
-| United Kingdom | GB | 36,392 | 36,222 | 18,345 | 2.07% | `aggregated-gb-only.txt` |
-| Australia | AU | 12,281 | 12,208 | 6,047 | 0.68% | `aggregated-au-only.txt` |
-| Germany | DE | 30,362 | 30,247 | 32,591 | 3.67% | `aggregated-de-only.txt` |
-| South Korea | KR | 4,027 | 3,999 | 11,709 | 1.32% | `aggregated-kr-only.txt` |
+| United States | US | 129,071 | 127,174 | 202,037 | 23.08% | `aggregated-us-only.txt` |
+| Canada | CA | 17,665 | 17,536 | 14,167 | 1.62% | `aggregated-ca-only.txt` |
+| United Kingdom | GB | 36,392 | 36,222 | 18,021 | 2.06% | `aggregated-gb-only.txt` |
+| Australia | AU | 12,281 | 12,208 | 5,576 | 0.64% | `aggregated-au-only.txt` |
+| Germany | DE | 30,362 | 30,247 | 31,850 | 3.64% | `aggregated-de-only.txt` |
+| South Korea | KR | 4,027 | 3,999 | 11,354 | 1.30% | `aggregated-kr-only.txt` |
 
 ## IP Sources
 
