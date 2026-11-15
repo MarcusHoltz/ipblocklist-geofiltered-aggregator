@@ -35,6 +35,7 @@ on:
       - 'docker-compose.yml'
       - 'filter_ips.py'
       - 'run.sh'
+      - 'nftables/**'
       - '.github/workflows/ip-aggregation.yml'
     branches: [ "main", "master" ]
   
@@ -50,6 +51,11 @@ on:
 env:
   # Set timezone for consistent logging
   TZ: UTC
+
+# One run at a time; a run that starts while another is going waits for it
+concurrency:
+  group: ip-aggregation
+  cancel-in-progress: false
 
 jobs:
   permission-check:
@@ -87,8 +93,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          # Fetch full history for better git operations
-          fetch-depth: 0
+          # Latest commit only; nothing here reads the history
+          fetch-depth: 1
 
       - name: Set up environment
         run: |
@@ -209,6 +215,34 @@ jobs:
             cat data/output/stats.md
           fi
 
+      - name: Build nftables sets
+        run: |
+          echo "=== Building nftables Sets ==="
+          curl -fsSL -o data/ips_webhooks.txt https://stripe.com/files/ips/ips_webhooks.txt
+          # run.sh empties data/output first, so there is exactly one combined file
+          BL=$(ls data/output/aggregated-multi-*countries-combined.txt)
+          python3 -I nftables/build-sets.py --csv data/geoip/geoip2-ipv4.csv --env .env \
+            --blocklist "$BL" --stripe data/ips_webhooks.txt --out data/sets
+          python3 -I nftables/countrycheck.py data/geoip/geoip2-ipv4.csv .env \
+            data/sets/geo_allow.txt data/sets/country-samples.tsv | tee data/countrycheck.log
+          # Anything but FAILURES: 0 stops the job here, so nothing is published
+          grep -q '^FAILURES: 0$' data/countrycheck.log
+
+      - name: Publish to the blocklists release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          echo "=== Publishing Release Assets ==="
+          # One fixed release; its files are replaced on every run and never go into git
+          gh release view blocklists > /dev/null 2>&1 || \
+            gh release create blocklists --title "Blocklists" --notes "Files from the latest run, replaced on every run."
+          gh release upload blocklists --clobber data/output/* \
+            data/sets/geo_allow.txt data/sets/allow_ops.txt data/sets/bl_single.txt \
+            data/sets/bl_range.txt data/sets/country-samples.tsv
+          # SHA256SUMS last, so it never lists files that are not up yet
+          gh release upload blocklists --clobber data/sets/SHA256SUMS
+
       - name: Generate enhanced README with statistics
         run: |
           echo "=== Generating Enhanced README with Statistics ==="
@@ -261,11 +295,14 @@ jobs:
           # Add current files summary
           echo "### 📁 Generated Files" >> README.md
           echo "" >> README.md
-          
+          echo "Every file is on the [blocklists release](https://github.com/${{ github.repository }}/releases/tag/blocklists), replaced on every run." >> README.md
+          echo "" >> README.md
+          DL="https://github.com/${{ github.repository }}/releases/download/blocklists"
+
           if [ -f "data/output/aggregated.txt" ]; then
             TOTAL_IPS=$(wc -l < data/output/aggregated.txt)
             FORMATTED_TOTAL=$(add_commas "$TOTAL_IPS")
-            echo "- **\`aggregated.txt\`** - $FORMATTED_TOTAL total aggregated IPs from all sources" >> README.md
+            echo "- **[\`aggregated.txt\`]($DL/aggregated.txt)** - $FORMATTED_TOTAL total aggregated IPs from all sources" >> README.md
           fi
           
           # List all country-specific files
@@ -275,7 +312,7 @@ jobs:
               count=$(wc -l < "$file")
               formatted_count=$(add_commas "$count")
               country_code=$(echo "$filename" | sed 's/aggregated-\(.*\)-only\.txt/\1/' | tr '[:lower:]' '[:upper:]')
-              echo "- **\`$filename\`** - $formatted_count IPs from $country_code" >> README.md
+              echo "- **[\`$filename\`]($DL/$filename)** - $formatted_count IPs from $country_code" >> README.md
             fi
           done
           
@@ -285,9 +322,17 @@ jobs:
               filename=$(basename "$file")
               count=$(wc -l < "$file")
               formatted_count=$(add_commas "$count")
-              echo "- **\`$filename\`** - $formatted_count unique IPs (deduplicated across all countries)" >> README.md
+              echo "- **[\`$filename\`]($DL/$filename)** - $formatted_count unique IPs (deduplicated across all countries)" >> README.md
             fi
           done
+
+          # Set files written by nftables/build-sets.py
+          echo "- **[\`geo_allow.txt\`]($DL/geo_allow.txt)** - $(add_commas "$(wc -l < data/sets/geo_allow.txt)") ranges covering every configured country" >> README.md
+          echo "- **[\`allow_ops.txt\`]($DL/allow_ops.txt)** - Stripe webhook sender addresses" >> README.md
+          echo "- **[\`bl_single.txt\`]($DL/bl_single.txt)** - $(add_commas "$(wc -l < data/sets/bl_single.txt)") single addresses from the combined file" >> README.md
+          echo "- **[\`bl_range.txt\`]($DL/bl_range.txt)** - $(add_commas "$(wc -l < data/sets/bl_range.txt)") ranges from the combined file" >> README.md
+          echo "- **[\`SHA256SUMS\`]($DL/SHA256SUMS)** - checksums of the four files above" >> README.md
+          echo "- **[\`country-samples.tsv\`]($DL/country-samples.tsv)** - addresses the every-country check tested" >> README.md
           
           cat >> README.md << 'EOF'
           
@@ -450,18 +495,6 @@ jobs:
           - **Manual Trigger**: Via GitHub Actions interface
 
           
-          ## 🧹 Starting With Clean Output
-          
-          If you're going to customize the list: 
-          
-          - You should remove the [./data/output](https://github.com/${{ github.repository }}/edit/main/data/output) folder, as it will only contain data pertinent to the last run.
-          
-          - Always remove the [./data/output](https://github.com/${{ github.repository }}/edit/main/data/output) folder when you customize the countries. 
-          
-          > This will ensure you dont include older, unused countries in your new aggreagtion lists.
-
-
-          
           ## ⚡ Performance
           
           - **Multi-Country Processing**: Parallel processing of multiple countries
@@ -523,8 +556,8 @@ jobs:
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
           
-          # Add all changes
-          git add .
+          # README only: build output is published as release assets, never committed
+          git add README.md
           
           # Check if there are changes to commit
           if git diff --staged --quiet; then

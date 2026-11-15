@@ -1,0 +1,2 @@
+# Output of each run; GitHub Actions publishes it as release assets, never as commits
+data/
