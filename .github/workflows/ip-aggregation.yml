@@ -219,11 +219,13 @@ jobs:
         run: |
           echo "=== Building nftables Sets ==="
           curl -fsSL -o data/ips_webhooks.txt https://stripe.com/files/ips/ips_webhooks.txt
+          # filter_ips.py deletes its own copy of the GeoIP CSV when it finishes
+          curl -fsSL -o data/geoip2-ipv4.csv https://datahub.io/core/geoip2-ipv4/r/geoip2-ipv4.csv
           # run.sh empties data/output first, so there is exactly one combined file
           BL=$(ls data/output/aggregated-multi-*countries-combined.txt)
-          python3 -I nftables/build-sets.py --csv data/geoip/geoip2-ipv4.csv --env .env \
+          python3 -I nftables/build-sets.py --csv data/geoip2-ipv4.csv --env .env \
             --blocklist "$BL" --stripe data/ips_webhooks.txt --out data/sets
-          python3 -I nftables/countrycheck.py data/geoip/geoip2-ipv4.csv .env \
+          python3 -I nftables/countrycheck.py data/geoip2-ipv4.csv .env \
             data/sets/geo_allow.txt data/sets/country-samples.tsv | tee data/countrycheck.log
           # Anything but FAILURES: 0 stops the job here, so nothing is published
           grep -q '^FAILURES: 0$' data/countrycheck.log
