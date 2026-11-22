@@ -2,7 +2,7 @@
 
 ![Workflow Status](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/actions/workflows/ip-aggregation.yml/badge.svg)
 ![Countries](https://img.shields.io/badge/Countries-82-278EF5)
-![Total IPs Blocked](https://img.shields.io/badge/Blocked_IPs-1026648-2D56A8)
+![Total IPs Blocked](https://img.shields.io/badge/Blocked_IPs-1024914-2D56A8)
           
 ![Issues](https://img.shields.io/github/issues/MarcusHoltz/ipblocklist-geofiltered-aggregator)
 ![Last Commit](https://img.shields.io/github/last-commit/MarcusHoltz/ipblocklist-geofiltered-aggregator)
@@ -27,13 +27,13 @@ Automated IP blocklist aggregation with multi-country geographical filtering
 
 ## 📊 Latest Statistics
 
-**Last Updated:** 2026-11-21 20:41:44 UTC
+**Last Updated:** 2026-11-22 10:00:05 UTC
 
 ## 📈 Country Distribution
 
 ```mermaid
 pie showData title IP Blocklist Distribution by Country
-"United States" : 25.2
+"United States" : 25.6
 "Germany" : 3.7
 "India" : 3.1
 "Singapore" : 2.9
@@ -47,108 +47,108 @@ pie showData title IP Blocklist Distribution by Country
 "Mexico" : 1.4
 "Indonesia" : 1.3
 "Japan" : 1.1
-"Vietnam" : 1.1
+"Vietnam" : 1.0
 "South Korea" : 1.0
 "Italy" : 1.0
 "Hong Kong" : 1.0
 "Taiwan" : 0.9
-"Other/Unfiltered" : 42.6
+"Other/Unfiltered" : 42.2
 ```
 
 ## Overall Summary
 
-- **Total Input IPs:** 1,026,648
+- **Total Input IPs:** 1,024,914
 - **Countries Processed:** 82
-- **Combined Unique IPs:** 700,143
+- **Combined Unique IPs:** 703,941
 - **Combined Output File:** `aggregated-multi-82countries-combined.txt`
-- **Overall Filter Rate:** 68.20%
+- **Overall Filter Rate:** 68.68%
 
 ## Per-Country Results
 
 | Country | Code | Networks Found | Networks Optimized | IPs Matched | Filter Rate | Output File |
 |---------|------|----------------|--------------------|-----------|-----------|-----------|
-| Albania | AL | 390 | 390 | 1,054 | 0.10% | `aggregated-al-only.txt` |
-| Armenia | AM | 350 | 350 | 1,061 | 0.10% | `aggregated-am-only.txt` |
-| Austria | AT | 4,611 | 4,602 | 911 | 0.09% | `aggregated-at-only.txt` |
-| Australia | AU | 11,850 | 11,779 | 6,712 | 0.65% | `aggregated-au-only.txt` |
-| Azerbaijan | AZ | 423 | 419 | 2,099 | 0.20% | `aggregated-az-only.txt` |
-| Barbados | BB | 192 | 192 | 176 | 0.02% | `aggregated-bb-only.txt` |
-| Belgium | BE | 5,779 | 5,777 | 20,866 | 2.03% | `aggregated-be-only.txt` |
-| Bulgaria | BG | 2,380 | 2,370 | 1,668 | 0.16% | `aggregated-bg-only.txt` |
-| Bermuda | BM | 347 | 347 | 21 | 0.00% | `aggregated-bm-only.txt` |
-| Brunei | BN | 122 | 122 | 48 | 0.00% | `aggregated-bn-only.txt` |
-| Belarus | BY | 463 | 463 | 852 | 0.08% | `aggregated-by-only.txt` |
-| Canada | CA | 17,676 | 17,560 | 18,083 | 1.76% | `aggregated-ca-only.txt` |
-| Switzerland | CH | 6,627 | 6,504 | 3,015 | 0.29% | `aggregated-ch-only.txt` |
-| Cameroon | CM | 186 | 186 | 171 | 0.02% | `aggregated-cm-only.txt` |
-| Cyprus | CY | 855 | 855 | 393 | 0.04% | `aggregated-cy-only.txt` |
-| Czechia | CZ | 3,754 | 3,752 | 1,555 | 0.15% | `aggregated-cz-only.txt` |
-| Germany | DE | 30,627 | 30,519 | 37,671 | 3.67% | `aggregated-de-only.txt` |
-| Denmark | DK | 3,966 | 3,959 | 754 | 0.07% | `aggregated-dk-only.txt` |
-| Estonia | EE | 1,126 | 1,126 | 398 | 0.04% | `aggregated-ee-only.txt` |
-| Egypt | EG | 786 | 786 | 2,459 | 0.24% | `aggregated-eg-only.txt` |
-| Spain | ES | 11,654 | 11,635 | 8,740 | 0.85% | `aggregated-es-only.txt` |
-| Finland | FI | 3,698 | 3,692 | 3,314 | 0.32% | `aggregated-fi-only.txt` |
-| France | FR | 33,666 | 33,636 | 22,802 | 2.22% | `aggregated-fr-only.txt` |
-| United Kingdom | GB | 36,568 | 36,414 | 21,783 | 2.12% | `aggregated-gb-only.txt` |
-| Georgia | GE | 480 | 479 | 813 | 0.08% | `aggregated-ge-only.txt` |
-| Ghana | GH | 362 | 362 | 427 | 0.04% | `aggregated-gh-only.txt` |
+| Albania | AL | 398 | 398 | 1,055 | 0.10% | `aggregated-al-only.txt` |
+| Armenia | AM | 385 | 385 | 1,069 | 0.10% | `aggregated-am-only.txt` |
+| Austria | AT | 4,648 | 4,639 | 906 | 0.09% | `aggregated-at-only.txt` |
+| Australia | AU | 11,856 | 11,786 | 6,646 | 0.65% | `aggregated-au-only.txt` |
+| Azerbaijan | AZ | 432 | 428 | 2,104 | 0.21% | `aggregated-az-only.txt` |
+| Barbados | BB | 198 | 198 | 176 | 0.02% | `aggregated-bb-only.txt` |
+| Belgium | BE | 5,811 | 5,809 | 20,802 | 2.03% | `aggregated-be-only.txt` |
+| Bulgaria | BG | 2,392 | 2,378 | 1,669 | 0.16% | `aggregated-bg-only.txt` |
+| Bermuda | BM | 350 | 350 | 21 | 0.00% | `aggregated-bm-only.txt` |
+| Brunei | BN | 128 | 128 | 48 | 0.00% | `aggregated-bn-only.txt` |
+| Belarus | BY | 467 | 467 | 856 | 0.08% | `aggregated-by-only.txt` |
+| Canada | CA | 17,849 | 17,727 | 18,243 | 1.78% | `aggregated-ca-only.txt` |
+| Switzerland | CH | 6,681 | 6,558 | 3,022 | 0.29% | `aggregated-ch-only.txt` |
+| Cameroon | CM | 194 | 194 | 171 | 0.02% | `aggregated-cm-only.txt` |
+| Cyprus | CY | 884 | 884 | 391 | 0.04% | `aggregated-cy-only.txt` |
+| Czechia | CZ | 3,807 | 3,805 | 1,552 | 0.15% | `aggregated-cz-only.txt` |
+| Germany | DE | 30,809 | 30,705 | 37,927 | 3.70% | `aggregated-de-only.txt` |
+| Denmark | DK | 3,988 | 3,981 | 760 | 0.07% | `aggregated-dk-only.txt` |
+| Estonia | EE | 1,150 | 1,150 | 396 | 0.04% | `aggregated-ee-only.txt` |
+| Egypt | EG | 800 | 800 | 2,479 | 0.24% | `aggregated-eg-only.txt` |
+| Spain | ES | 11,794 | 11,775 | 8,782 | 0.86% | `aggregated-es-only.txt` |
+| Finland | FI | 3,591 | 3,585 | 3,330 | 0.32% | `aggregated-fi-only.txt` |
+| France | FR | 33,764 | 33,733 | 22,953 | 2.24% | `aggregated-fr-only.txt` |
+| United Kingdom | GB | 36,853 | 36,697 | 21,954 | 2.14% | `aggregated-gb-only.txt` |
+| Georgia | GE | 487 | 486 | 815 | 0.08% | `aggregated-ge-only.txt` |
+| Ghana | GH | 373 | 373 | 424 | 0.04% | `aggregated-gh-only.txt` |
 | Gibraltar | GI | 165 | 165 | 1 | 0.00% | `aggregated-gi-only.txt` |
-| Greece | GR | 1,558 | 1,555 | 790 | 0.08% | `aggregated-gr-only.txt` |
-| Hong Kong | HK | 11,320 | 11,301 | 10,039 | 0.98% | `aggregated-hk-only.txt` |
-| Croatia | HR | 849 | 849 | 395 | 0.04% | `aggregated-hr-only.txt` |
-| Hungary | HU | 1,830 | 1,829 | 1,057 | 0.10% | `aggregated-hu-only.txt` |
-| Indonesia | ID | 6,829 | 6,808 | 13,834 | 1.35% | `aggregated-id-only.txt` |
-| Ireland | IE | 5,175 | 5,171 | 5,250 | 0.51% | `aggregated-ie-only.txt` |
-| Israel | IL | 2,531 | 2,529 | 4,995 | 0.49% | `aggregated-il-only.txt` |
-| India | IN | 13,681 | 13,656 | 32,224 | 3.14% | `aggregated-in-only.txt` |
-| Iceland | IS | 388 | 388 | 167 | 0.02% | `aggregated-is-only.txt` |
-| Italy | IT | 10,034 | 10,009 | 10,207 | 0.99% | `aggregated-it-only.txt` |
-| Japan | JP | 12,436 | 12,371 | 11,008 | 1.07% | `aggregated-jp-only.txt` |
-| Kenya | KE | 922 | 922 | 2,892 | 0.28% | `aggregated-ke-only.txt` |
-| Kyrgyzstan | KG | 256 | 256 | 508 | 0.05% | `aggregated-kg-only.txt` |
-| South Korea | KR | 4,001 | 3,992 | 10,573 | 1.03% | `aggregated-kr-only.txt` |
-| Kuwait | KW | 468 | 468 | 381 | 0.04% | `aggregated-kw-only.txt` |
-| Cayman Islands | KY | 155 | 155 | 16 | 0.00% | `aggregated-ky-only.txt` |
-| Kazakhstan | KZ | 1,359 | 1,358 | 2,401 | 0.23% | `aggregated-kz-only.txt` |
-| Laos | LA | 164 | 164 | 212 | 0.02% | `aggregated-la-only.txt` |
-| Liechtenstein | LI | 378 | 378 | 39 | 0.00% | `aggregated-li-only.txt` |
-| Lithuania | LT | 1,515 | 1,514 | 799 | 0.08% | `aggregated-lt-only.txt` |
-| Luxembourg | LU | 1,534 | 1,534 | 235 | 0.02% | `aggregated-lu-only.txt` |
-| Latvia | LV | 1,264 | 1,264 | 740 | 0.07% | `aggregated-lv-only.txt` |
-| Moldova | MD | 797 | 796 | 1,070 | 0.10% | `aggregated-md-only.txt` |
-| Macao | MO | 125 | 125 | 140 | 0.01% | `aggregated-mo-only.txt` |
-| Malta | MT | 310 | 310 | 302 | 0.03% | `aggregated-mt-only.txt` |
-| Mexico | MX | 4,376 | 4,369 | 14,001 | 1.36% | `aggregated-mx-only.txt` |
-| Malaysia | MY | 2,680 | 2,680 | 5,593 | 0.54% | `aggregated-my-only.txt` |
-| Nigeria | NG | 1,173 | 1,173 | 1,191 | 0.12% | `aggregated-ng-only.txt` |
-| The Netherlands | NL | 19,107 | 19,008 | 22,437 | 2.19% | `aggregated-nl-only.txt` |
-| Norway | NO | 3,257 | 3,256 | 735 | 0.07% | `aggregated-no-only.txt` |
-| Nepal | NP | 467 | 467 | 1,750 | 0.17% | `aggregated-np-only.txt` |
-| New Zealand | NZ | 2,325 | 2,311 | 629 | 0.06% | `aggregated-nz-only.txt` |
-| Philippines | PH | 2,240 | 2,239 | 4,454 | 0.43% | `aggregated-ph-only.txt` |
-| Poland | PL | 8,497 | 8,468 | 14,338 | 1.40% | `aggregated-pl-only.txt` |
-| Portugal | PT | 2,094 | 2,092 | 2,760 | 0.27% | `aggregated-pt-only.txt` |
-| Qatar | QA | 491 | 491 | 1,514 | 0.15% | `aggregated-qa-only.txt` |
-| Romania | RO | 4,120 | 4,109 | 2,307 | 0.22% | `aggregated-ro-only.txt` |
-| Serbia | RS | 1,019 | 1,019 | 953 | 0.09% | `aggregated-rs-only.txt` |
-| Saudi Arabia | SA | 1,810 | 1,810 | 3,048 | 0.30% | `aggregated-sa-only.txt` |
-| Sweden | SE | 10,339 | 10,330 | 4,707 | 0.46% | `aggregated-se-only.txt` |
-| Singapore | SG | 9,821 | 9,809 | 29,905 | 2.91% | `aggregated-sg-only.txt` |
-| Slovenia | SI | 1,071 | 1,071 | 229 | 0.02% | `aggregated-si-only.txt` |
-| Slovakia | SK | 1,180 | 1,179 | 469 | 0.05% | `aggregated-sk-only.txt` |
-| Thailand | TH | 2,101 | 2,101 | 4,520 | 0.44% | `aggregated-th-only.txt` |
-| Tajikistan | TJ | 153 | 153 | 221 | 0.02% | `aggregated-tj-only.txt` |
-| Türkiye | TR | 3,583 | 3,551 | 8,400 | 0.82% | `aggregated-tr-only.txt` |
-| Taiwan | TW | 2,465 | 2,465 | 9,285 | 0.90% | `aggregated-tw-only.txt` |
-| Ukraine | UA | 5,415 | 5,374 | 20,413 | 1.99% | `aggregated-ua-only.txt` |
-| Uganda | UG | 247 | 247 | 338 | 0.03% | `aggregated-ug-only.txt` |
-| United States | US | 129,584 | 127,711 | 258,822 | 25.21% | `aggregated-us-only.txt` |
-| British Virgin Islands | VG | 261 | 261 | 41 | 0.00% | `aggregated-vg-only.txt` |
-| Vietnam | VN | 2,264 | 2,264 | 10,962 | 1.07% | `aggregated-vn-only.txt` |
-| South Africa | ZA | 4,000 | 3,987 | 7,494 | 0.73% | `aggregated-za-only.txt` |
-| Zambia | ZM | 172 | 172 | 190 | 0.02% | `aggregated-zm-only.txt` |
-| Zimbabwe | ZW | 241 | 241 | 316 | 0.03% | `aggregated-zw-only.txt` |
+| Greece | GR | 1,577 | 1,574 | 794 | 0.08% | `aggregated-gr-only.txt` |
+| Hong Kong | HK | 11,344 | 11,324 | 10,017 | 0.98% | `aggregated-hk-only.txt` |
+| Croatia | HR | 860 | 860 | 396 | 0.04% | `aggregated-hr-only.txt` |
+| Hungary | HU | 1,859 | 1,858 | 1,048 | 0.10% | `aggregated-hu-only.txt` |
+| Indonesia | ID | 6,879 | 6,858 | 13,786 | 1.35% | `aggregated-id-only.txt` |
+| Ireland | IE | 5,224 | 5,220 | 5,453 | 0.53% | `aggregated-ie-only.txt` |
+| Israel | IL | 2,537 | 2,535 | 5,056 | 0.49% | `aggregated-il-only.txt` |
+| India | IN | 13,799 | 13,774 | 32,203 | 3.14% | `aggregated-in-only.txt` |
+| Iceland | IS | 400 | 400 | 165 | 0.02% | `aggregated-is-only.txt` |
+| Italy | IT | 10,117 | 10,080 | 10,262 | 1.00% | `aggregated-it-only.txt` |
+| Japan | JP | 12,609 | 12,558 | 11,024 | 1.08% | `aggregated-jp-only.txt` |
+| Kenya | KE | 934 | 934 | 2,900 | 0.28% | `aggregated-ke-only.txt` |
+| Kyrgyzstan | KG | 262 | 262 | 508 | 0.05% | `aggregated-kg-only.txt` |
+| South Korea | KR | 4,056 | 4,047 | 10,406 | 1.02% | `aggregated-kr-only.txt` |
+| Kuwait | KW | 476 | 476 | 384 | 0.04% | `aggregated-kw-only.txt` |
+| Cayman Islands | KY | 157 | 157 | 16 | 0.00% | `aggregated-ky-only.txt` |
+| Kazakhstan | KZ | 1,378 | 1,377 | 2,406 | 0.23% | `aggregated-kz-only.txt` |
+| Laos | LA | 167 | 167 | 203 | 0.02% | `aggregated-la-only.txt` |
+| Liechtenstein | LI | 384 | 384 | 40 | 0.00% | `aggregated-li-only.txt` |
+| Lithuania | LT | 1,528 | 1,527 | 792 | 0.08% | `aggregated-lt-only.txt` |
+| Luxembourg | LU | 1,549 | 1,549 | 236 | 0.02% | `aggregated-lu-only.txt` |
+| Latvia | LV | 1,261 | 1,261 | 734 | 0.07% | `aggregated-lv-only.txt` |
+| Moldova | MD | 804 | 803 | 1,072 | 0.10% | `aggregated-md-only.txt` |
+| Macao | MO | 123 | 123 | 139 | 0.01% | `aggregated-mo-only.txt` |
+| Malta | MT | 319 | 319 | 302 | 0.03% | `aggregated-mt-only.txt` |
+| Mexico | MX | 4,451 | 4,444 | 14,118 | 1.38% | `aggregated-mx-only.txt` |
+| Malaysia | MY | 2,720 | 2,720 | 5,502 | 0.54% | `aggregated-my-only.txt` |
+| Nigeria | NG | 1,195 | 1,195 | 1,196 | 0.12% | `aggregated-ng-only.txt` |
+| The Netherlands | NL | 19,221 | 19,122 | 22,669 | 2.21% | `aggregated-nl-only.txt` |
+| Norway | NO | 3,285 | 3,284 | 741 | 0.07% | `aggregated-no-only.txt` |
+| Nepal | NP | 473 | 473 | 1,738 | 0.17% | `aggregated-np-only.txt` |
+| New Zealand | NZ | 2,363 | 2,349 | 625 | 0.06% | `aggregated-nz-only.txt` |
+| Philippines | PH | 2,254 | 2,253 | 4,337 | 0.42% | `aggregated-ph-only.txt` |
+| Poland | PL | 8,541 | 8,513 | 14,358 | 1.40% | `aggregated-pl-only.txt` |
+| Portugal | PT | 2,107 | 2,105 | 2,783 | 0.27% | `aggregated-pt-only.txt` |
+| Qatar | QA | 499 | 499 | 1,521 | 0.15% | `aggregated-qa-only.txt` |
+| Romania | RO | 4,161 | 4,150 | 2,317 | 0.23% | `aggregated-ro-only.txt` |
+| Serbia | RS | 1,033 | 1,033 | 955 | 0.09% | `aggregated-rs-only.txt` |
+| Saudi Arabia | SA | 1,825 | 1,825 | 3,072 | 0.30% | `aggregated-sa-only.txt` |
+| Sweden | SE | 10,373 | 10,364 | 4,917 | 0.48% | `aggregated-se-only.txt` |
+| Singapore | SG | 9,895 | 9,883 | 29,857 | 2.91% | `aggregated-sg-only.txt` |
+| Slovenia | SI | 1,088 | 1,086 | 230 | 0.02% | `aggregated-si-only.txt` |
+| Slovakia | SK | 1,203 | 1,202 | 466 | 0.05% | `aggregated-sk-only.txt` |
+| Thailand | TH | 2,112 | 2,112 | 4,518 | 0.44% | `aggregated-th-only.txt` |
+| Tajikistan | TJ | 161 | 161 | 222 | 0.02% | `aggregated-tj-only.txt` |
+| Türkiye | TR | 3,618 | 3,591 | 8,474 | 0.83% | `aggregated-tr-only.txt` |
+| Taiwan | TW | 2,538 | 2,538 | 8,789 | 0.86% | `aggregated-tw-only.txt` |
+| Ukraine | UA | 5,421 | 5,379 | 20,564 | 2.01% | `aggregated-ua-only.txt` |
+| Uganda | UG | 254 | 254 | 337 | 0.03% | `aggregated-ug-only.txt` |
+| United States | US | 131,096 | 129,226 | 262,264 | 25.59% | `aggregated-us-only.txt` |
+| British Virgin Islands | VG | 309 | 309 | 41 | 0.00% | `aggregated-vg-only.txt` |
+| Vietnam | VN | 2,294 | 2,294 | 10,414 | 1.02% | `aggregated-vn-only.txt` |
+| South Africa | ZA | 4,009 | 3,996 | 7,513 | 0.73% | `aggregated-za-only.txt` |
+| Zambia | ZM | 179 | 179 | 190 | 0.02% | `aggregated-zm-only.txt` |
+| Zimbabwe | ZW | 249 | 249 | 319 | 0.03% | `aggregated-zw-only.txt` |
 
 ## IP Sources
 
@@ -173,94 +173,94 @@ pie showData title IP Blocklist Distribution by Country
 
 Every file is on the [blocklists release](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/tag/blocklists), replaced on every run.
 
-- **[`aggregated.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated.txt)** - 1,026,648 total aggregated IPs from all sources
-- **[`aggregated-al-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-al-only.txt)** - 1,054 IPs from AL
-- **[`aggregated-am-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-am-only.txt)** - 1,061 IPs from AM
-- **[`aggregated-at-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-at-only.txt)** - 911 IPs from AT
-- **[`aggregated-au-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-au-only.txt)** - 6,712 IPs from AU
-- **[`aggregated-az-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-az-only.txt)** - 2,099 IPs from AZ
+- **[`aggregated.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated.txt)** - 1,024,914 total aggregated IPs from all sources
+- **[`aggregated-al-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-al-only.txt)** - 1,055 IPs from AL
+- **[`aggregated-am-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-am-only.txt)** - 1,069 IPs from AM
+- **[`aggregated-at-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-at-only.txt)** - 906 IPs from AT
+- **[`aggregated-au-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-au-only.txt)** - 6,646 IPs from AU
+- **[`aggregated-az-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-az-only.txt)** - 2,104 IPs from AZ
 - **[`aggregated-bb-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-bb-only.txt)** - 176 IPs from BB
-- **[`aggregated-be-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-be-only.txt)** - 20,866 IPs from BE
-- **[`aggregated-bg-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-bg-only.txt)** - 1,668 IPs from BG
+- **[`aggregated-be-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-be-only.txt)** - 20,802 IPs from BE
+- **[`aggregated-bg-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-bg-only.txt)** - 1,669 IPs from BG
 - **[`aggregated-bm-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-bm-only.txt)** - 21 IPs from BM
 - **[`aggregated-bn-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-bn-only.txt)** - 48 IPs from BN
-- **[`aggregated-by-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-by-only.txt)** - 852 IPs from BY
-- **[`aggregated-ca-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-ca-only.txt)** - 18,083 IPs from CA
-- **[`aggregated-ch-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-ch-only.txt)** - 3,015 IPs from CH
+- **[`aggregated-by-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-by-only.txt)** - 856 IPs from BY
+- **[`aggregated-ca-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-ca-only.txt)** - 18,243 IPs from CA
+- **[`aggregated-ch-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-ch-only.txt)** - 3,022 IPs from CH
 - **[`aggregated-cm-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-cm-only.txt)** - 171 IPs from CM
-- **[`aggregated-cy-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-cy-only.txt)** - 393 IPs from CY
-- **[`aggregated-cz-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-cz-only.txt)** - 1,555 IPs from CZ
-- **[`aggregated-de-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-de-only.txt)** - 37,671 IPs from DE
-- **[`aggregated-dk-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-dk-only.txt)** - 754 IPs from DK
-- **[`aggregated-ee-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-ee-only.txt)** - 398 IPs from EE
-- **[`aggregated-eg-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-eg-only.txt)** - 2,459 IPs from EG
-- **[`aggregated-es-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-es-only.txt)** - 8,740 IPs from ES
-- **[`aggregated-fi-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-fi-only.txt)** - 3,314 IPs from FI
-- **[`aggregated-fr-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-fr-only.txt)** - 22,802 IPs from FR
-- **[`aggregated-gb-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-gb-only.txt)** - 21,783 IPs from GB
-- **[`aggregated-ge-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-ge-only.txt)** - 813 IPs from GE
-- **[`aggregated-gh-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-gh-only.txt)** - 427 IPs from GH
+- **[`aggregated-cy-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-cy-only.txt)** - 391 IPs from CY
+- **[`aggregated-cz-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-cz-only.txt)** - 1,552 IPs from CZ
+- **[`aggregated-de-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-de-only.txt)** - 37,927 IPs from DE
+- **[`aggregated-dk-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-dk-only.txt)** - 760 IPs from DK
+- **[`aggregated-ee-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-ee-only.txt)** - 396 IPs from EE
+- **[`aggregated-eg-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-eg-only.txt)** - 2,479 IPs from EG
+- **[`aggregated-es-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-es-only.txt)** - 8,782 IPs from ES
+- **[`aggregated-fi-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-fi-only.txt)** - 3,330 IPs from FI
+- **[`aggregated-fr-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-fr-only.txt)** - 22,953 IPs from FR
+- **[`aggregated-gb-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-gb-only.txt)** - 21,954 IPs from GB
+- **[`aggregated-ge-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-ge-only.txt)** - 815 IPs from GE
+- **[`aggregated-gh-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-gh-only.txt)** - 424 IPs from GH
 - **[`aggregated-gi-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-gi-only.txt)** - 1 IPs from GI
-- **[`aggregated-gr-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-gr-only.txt)** - 790 IPs from GR
-- **[`aggregated-hk-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-hk-only.txt)** - 10,039 IPs from HK
-- **[`aggregated-hr-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-hr-only.txt)** - 395 IPs from HR
-- **[`aggregated-hu-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-hu-only.txt)** - 1,057 IPs from HU
-- **[`aggregated-id-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-id-only.txt)** - 13,834 IPs from ID
-- **[`aggregated-ie-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-ie-only.txt)** - 5,250 IPs from IE
-- **[`aggregated-il-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-il-only.txt)** - 4,995 IPs from IL
-- **[`aggregated-in-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-in-only.txt)** - 32,224 IPs from IN
-- **[`aggregated-is-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-is-only.txt)** - 167 IPs from IS
-- **[`aggregated-it-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-it-only.txt)** - 10,207 IPs from IT
-- **[`aggregated-jp-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-jp-only.txt)** - 11,008 IPs from JP
-- **[`aggregated-ke-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-ke-only.txt)** - 2,892 IPs from KE
+- **[`aggregated-gr-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-gr-only.txt)** - 794 IPs from GR
+- **[`aggregated-hk-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-hk-only.txt)** - 10,017 IPs from HK
+- **[`aggregated-hr-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-hr-only.txt)** - 396 IPs from HR
+- **[`aggregated-hu-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-hu-only.txt)** - 1,048 IPs from HU
+- **[`aggregated-id-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-id-only.txt)** - 13,786 IPs from ID
+- **[`aggregated-ie-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-ie-only.txt)** - 5,453 IPs from IE
+- **[`aggregated-il-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-il-only.txt)** - 5,056 IPs from IL
+- **[`aggregated-in-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-in-only.txt)** - 32,203 IPs from IN
+- **[`aggregated-is-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-is-only.txt)** - 165 IPs from IS
+- **[`aggregated-it-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-it-only.txt)** - 10,262 IPs from IT
+- **[`aggregated-jp-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-jp-only.txt)** - 11,024 IPs from JP
+- **[`aggregated-ke-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-ke-only.txt)** - 2,900 IPs from KE
 - **[`aggregated-kg-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-kg-only.txt)** - 508 IPs from KG
-- **[`aggregated-kr-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-kr-only.txt)** - 10,573 IPs from KR
-- **[`aggregated-kw-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-kw-only.txt)** - 381 IPs from KW
+- **[`aggregated-kr-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-kr-only.txt)** - 10,406 IPs from KR
+- **[`aggregated-kw-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-kw-only.txt)** - 384 IPs from KW
 - **[`aggregated-ky-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-ky-only.txt)** - 16 IPs from KY
-- **[`aggregated-kz-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-kz-only.txt)** - 2,401 IPs from KZ
-- **[`aggregated-la-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-la-only.txt)** - 212 IPs from LA
-- **[`aggregated-li-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-li-only.txt)** - 39 IPs from LI
-- **[`aggregated-lt-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-lt-only.txt)** - 799 IPs from LT
-- **[`aggregated-lu-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-lu-only.txt)** - 235 IPs from LU
-- **[`aggregated-lv-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-lv-only.txt)** - 740 IPs from LV
-- **[`aggregated-md-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-md-only.txt)** - 1,070 IPs from MD
-- **[`aggregated-mo-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-mo-only.txt)** - 140 IPs from MO
+- **[`aggregated-kz-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-kz-only.txt)** - 2,406 IPs from KZ
+- **[`aggregated-la-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-la-only.txt)** - 203 IPs from LA
+- **[`aggregated-li-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-li-only.txt)** - 40 IPs from LI
+- **[`aggregated-lt-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-lt-only.txt)** - 792 IPs from LT
+- **[`aggregated-lu-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-lu-only.txt)** - 236 IPs from LU
+- **[`aggregated-lv-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-lv-only.txt)** - 734 IPs from LV
+- **[`aggregated-md-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-md-only.txt)** - 1,072 IPs from MD
+- **[`aggregated-mo-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-mo-only.txt)** - 139 IPs from MO
 - **[`aggregated-mt-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-mt-only.txt)** - 302 IPs from MT
-- **[`aggregated-mx-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-mx-only.txt)** - 14,001 IPs from MX
-- **[`aggregated-my-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-my-only.txt)** - 5,593 IPs from MY
-- **[`aggregated-ng-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-ng-only.txt)** - 1,191 IPs from NG
-- **[`aggregated-nl-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-nl-only.txt)** - 22,437 IPs from NL
-- **[`aggregated-no-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-no-only.txt)** - 735 IPs from NO
-- **[`aggregated-np-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-np-only.txt)** - 1,750 IPs from NP
-- **[`aggregated-nz-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-nz-only.txt)** - 629 IPs from NZ
-- **[`aggregated-ph-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-ph-only.txt)** - 4,454 IPs from PH
-- **[`aggregated-pl-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-pl-only.txt)** - 14,338 IPs from PL
-- **[`aggregated-pt-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-pt-only.txt)** - 2,760 IPs from PT
-- **[`aggregated-qa-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-qa-only.txt)** - 1,514 IPs from QA
-- **[`aggregated-ro-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-ro-only.txt)** - 2,307 IPs from RO
-- **[`aggregated-rs-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-rs-only.txt)** - 953 IPs from RS
-- **[`aggregated-sa-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-sa-only.txt)** - 3,048 IPs from SA
-- **[`aggregated-se-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-se-only.txt)** - 4,707 IPs from SE
-- **[`aggregated-sg-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-sg-only.txt)** - 29,905 IPs from SG
-- **[`aggregated-si-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-si-only.txt)** - 229 IPs from SI
-- **[`aggregated-sk-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-sk-only.txt)** - 469 IPs from SK
-- **[`aggregated-th-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-th-only.txt)** - 4,520 IPs from TH
-- **[`aggregated-tj-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-tj-only.txt)** - 221 IPs from TJ
-- **[`aggregated-tr-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-tr-only.txt)** - 8,400 IPs from TR
-- **[`aggregated-tw-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-tw-only.txt)** - 9,285 IPs from TW
-- **[`aggregated-ua-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-ua-only.txt)** - 20,413 IPs from UA
-- **[`aggregated-ug-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-ug-only.txt)** - 338 IPs from UG
-- **[`aggregated-us-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-us-only.txt)** - 258,822 IPs from US
+- **[`aggregated-mx-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-mx-only.txt)** - 14,118 IPs from MX
+- **[`aggregated-my-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-my-only.txt)** - 5,502 IPs from MY
+- **[`aggregated-ng-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-ng-only.txt)** - 1,196 IPs from NG
+- **[`aggregated-nl-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-nl-only.txt)** - 22,669 IPs from NL
+- **[`aggregated-no-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-no-only.txt)** - 741 IPs from NO
+- **[`aggregated-np-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-np-only.txt)** - 1,738 IPs from NP
+- **[`aggregated-nz-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-nz-only.txt)** - 625 IPs from NZ
+- **[`aggregated-ph-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-ph-only.txt)** - 4,337 IPs from PH
+- **[`aggregated-pl-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-pl-only.txt)** - 14,358 IPs from PL
+- **[`aggregated-pt-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-pt-only.txt)** - 2,783 IPs from PT
+- **[`aggregated-qa-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-qa-only.txt)** - 1,521 IPs from QA
+- **[`aggregated-ro-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-ro-only.txt)** - 2,317 IPs from RO
+- **[`aggregated-rs-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-rs-only.txt)** - 955 IPs from RS
+- **[`aggregated-sa-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-sa-only.txt)** - 3,072 IPs from SA
+- **[`aggregated-se-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-se-only.txt)** - 4,917 IPs from SE
+- **[`aggregated-sg-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-sg-only.txt)** - 29,857 IPs from SG
+- **[`aggregated-si-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-si-only.txt)** - 230 IPs from SI
+- **[`aggregated-sk-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-sk-only.txt)** - 466 IPs from SK
+- **[`aggregated-th-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-th-only.txt)** - 4,518 IPs from TH
+- **[`aggregated-tj-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-tj-only.txt)** - 222 IPs from TJ
+- **[`aggregated-tr-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-tr-only.txt)** - 8,474 IPs from TR
+- **[`aggregated-tw-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-tw-only.txt)** - 8,789 IPs from TW
+- **[`aggregated-ua-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-ua-only.txt)** - 20,564 IPs from UA
+- **[`aggregated-ug-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-ug-only.txt)** - 337 IPs from UG
+- **[`aggregated-us-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-us-only.txt)** - 262,264 IPs from US
 - **[`aggregated-vg-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-vg-only.txt)** - 41 IPs from VG
-- **[`aggregated-vn-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-vn-only.txt)** - 10,962 IPs from VN
-- **[`aggregated-za-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-za-only.txt)** - 7,494 IPs from ZA
+- **[`aggregated-vn-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-vn-only.txt)** - 10,414 IPs from VN
+- **[`aggregated-za-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-za-only.txt)** - 7,513 IPs from ZA
 - **[`aggregated-zm-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-zm-only.txt)** - 190 IPs from ZM
-- **[`aggregated-zw-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-zw-only.txt)** - 316 IPs from ZW
-- **[`aggregated-multi-82countries-combined.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-multi-82countries-combined.txt)** - 700,143 unique IPs (deduplicated across all countries)
-- **[`geo_allow.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/geo_allow.txt)** - 133,998 ranges covering every configured country
+- **[`aggregated-zw-only.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-zw-only.txt)** - 319 IPs from ZW
+- **[`aggregated-multi-82countries-combined.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/aggregated-multi-82countries-combined.txt)** - 703,941 unique IPs (deduplicated across all countries)
+- **[`geo_allow.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/geo_allow.txt)** - 135,624 ranges covering every configured country
 - **[`allow_ops.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/allow_ops.txt)** - Stripe webhook sender addresses
-- **[`bl_single.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/bl_single.txt)** - 664,988 single addresses from the combined file
-- **[`bl_range.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/bl_range.txt)** - 35,155 ranges from the combined file
+- **[`bl_single.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/bl_single.txt)** - 668,290 single addresses from the combined file
+- **[`bl_range.txt`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/bl_range.txt)** - 35,651 ranges from the combined file
 - **[`SHA256SUMS`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/SHA256SUMS)** - checksums of the four files above
 - **[`country-samples.tsv`](https://github.com/MarcusHoltz/ipblocklist-geofiltered-aggregator/releases/download/blocklists/country-samples.tsv)** - addresses the every-country check tested
 
